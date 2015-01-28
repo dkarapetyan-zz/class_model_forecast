@@ -1,0 +1,12 @@
+\documentclass{article}
+
+\title{PPNR Validation -- Introduction}
+\begin{document}
+\maketitle
+\SweaveOpts{concordance=TRUE}
+\abstract{This document explains how to employ the PPNRValidation package
+to validate a typical PPNR model.}
+
+
+
+\end{document}
