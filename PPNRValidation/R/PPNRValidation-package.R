@@ -5,5 +5,5 @@
 #' @docType package
 #' @title Simplified PPNR validation
 #' @author Omar Azhar, Anton Bossenbroek, David Karapetyan, Prabakar Rajasekaran
-roxygen()
+NULL
 
