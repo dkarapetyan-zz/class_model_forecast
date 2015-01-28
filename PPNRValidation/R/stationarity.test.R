@@ -24,8 +24,6 @@ stationarity.test <- function(time.series)
   par(mfrow = c(2,1))
   
   # Load the packages so the tests can be generated.
-  require(forecast)
-  require(tseries)
   Acf(time.series)
   Pacf(time.series)
   
