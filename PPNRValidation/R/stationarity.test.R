@@ -29,7 +29,7 @@ stationarity.test <- function(time.series)
   
   results <- structure(list(), class = "StationarityTest")
   attr(results, "box.call") <- 
-	  'Box.test(time.series, type = ("Ljung-Box"))'
+	  'Box.test(time.series, type = ("Ljung-Box"), lag = 20)'
   attr(results, "box.result") <- eval(parse(file = "", 
                                        text = attr(results, "box.call")))
   attr(results, "adf.call") <- 
