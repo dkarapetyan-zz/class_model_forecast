@@ -2,19 +2,21 @@
 #' 
 #' This function prints the outcome of the various stationarity tests. 
 #'
-#' @param object the StationarityTest result.
-#' @param format format the table in a format given by kable.
-#' @param return.statistics return a data.frame that contains all the
-#' statistics.
-#' @param ... additional parameters passed on to kable.
+#' @param object The StationarityTest result.
+#' @param format The format the table in a format given by kable.
+#' @param return.statistics Indicate whether thedata.frame that contains all the
+#' statistics shoudl be returned.
+#' @param ... Additional parameters passed on to kable.
 #' @return return a data.frame with test name, series name, test statistic and
 #' p-value for each test performed.
-#' @export
 #' @examples
 #'  data(fred.totalunemployment)
 #'  result <- stationarity.test(fred.totalunemployment)
 #'  print(result)
+#'  
+#'  print(result, format = "latex")
 #' @seealso knitr::kable
+#' @export
 print.StationarityTest <- function(object, format = NULL, 
                                     return.statistics = FALSE, ...)
 {
