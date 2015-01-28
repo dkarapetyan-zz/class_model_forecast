@@ -15,7 +15,7 @@ Author: Omar Azhar, Anton Bossenbroek, David Karapetyan, Prabakar Rajasekaran
 Maintainer: Anton Bossenbroek <Anton.Bossenbroek1@ey.com>
 Description: The package allows facilitates the validation of PPNR models that are used 
              for CCAR purposes.
-Depends: forecast, zoo, tseries
+Depends: forecast, zoo, tseries, knitr
 License: GPL-3
 OS_type: windows
 Suggests: testthat
