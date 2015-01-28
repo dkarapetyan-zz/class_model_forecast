@@ -7,3 +7,5 @@
 #' @author Federal Reserve Bank of St. Louis 
 #' @references \url{http://research.stlouisfed.org/fred2/series/U6RATENSA#}
 #' @keywords data
+
+NULL
