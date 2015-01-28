@@ -1,6 +1,6 @@
-Package: PPNRvalidation
+Package: PPNRValidation
 Type: Package
-Title: The PPNRvalidation package allows for easy validation of PPNR CCAR models.
+Title: The PPNRValidation package allows for easy validation of PPNR CCAR models.
 Version: 0.01
 Date: 2015-01-27
 Authors@R: c( person("Omar Azhar", "Developer", role = c("aut"),
