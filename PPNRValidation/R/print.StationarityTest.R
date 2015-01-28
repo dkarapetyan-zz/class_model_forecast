@@ -24,7 +24,7 @@ print.StationarityTest <- function(object, format = NULL,
     stop("object is expected to be of class StationarityTest.")
   }
   
-  result <- data.frame("Test name" = c("Box-Ljung test",
+  result <- data.frame("Test.name" = c("Box-Ljung test",
                                        "Augmented Dickey-Fuller Test",
                                        "KPSS Test for Level Stationarity"),
                        "Series" = rep(object$series.name, 3),
@@ -41,6 +41,13 @@ print.StationarityTest <- function(object, format = NULL,
     print(object$adf.result)
     print(object$kpss.result)
   } else {
-    kable(result, format = format)
+    cat(kable(result, format = format, col.names = c("Test name", "Series",
+                                                     "Test statistic",
+                                                     "p-value"),
+              row.names = FALSE))
+  }
+  
+  if(return.statistics) {
+    return(return.statistics)
   }
 }
