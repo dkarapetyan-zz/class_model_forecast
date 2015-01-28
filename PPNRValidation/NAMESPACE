@@ -1,2 +1,4 @@
-exportPattern("^[[:alpha:]]+")
-import(forecast,tseries,zoo)
+S3method(print, StationarityTest)
+export(stationarity.test)
+import(forecast, tseries, zoo)
+importFrom(knitr, kable)
