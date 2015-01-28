@@ -1,4 +1,4 @@
 S3method(print, StationarityTest)
-exportPattern("^[[:alpha:]]+")
+export(stationarity.test)
 import(forecast, tseries, zoo)
 importFrom(knitr, kable)
