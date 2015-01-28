@@ -4,7 +4,7 @@
 #' the Ljung-Box, Augmented Dickey-Fuller (ADF) and 
 #' Kwiatkowski-Phillips-Schmidt-Shin (KPSS) tests. 
 #'
-#' @param ts a time series that should be tested.
+#' @param time.series a time series that should be tested.
 #' @return object of class StationarityTest
 #' @export
 #' @examples
