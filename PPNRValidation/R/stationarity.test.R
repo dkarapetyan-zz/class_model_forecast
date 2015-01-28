@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #'  data(fred.totalunemployment)
-#'  stationarity.test(fred.totalunemployment)
+#'  result <- stationarity.test(fred.totalunemployment)
 
 stationarity.test <- function(time.series)
 {
@@ -23,23 +23,31 @@ stationarity.test <- function(time.series)
   on.exit(par(old.par))
   par(mfrow = c(2,1))
   
+  time.series.name <- deparse(substitute(time.series))
+  
   # Load the packages so the tests can be generated.
-  Acf(time.series)
-  Pacf(time.series)
+  Acf(time.series, main = paste(time.series.name))
+  Pacf(time.series, main = paste(time.series.name))
   
-  results <- structure(list(), class = "StationarityTest")
-  attr(results, "box.call") <- 
+  
+  box.call <- 
 	  'Box.test(time.series, type = ("Ljung-Box"), lag = 20)'
-  attr(results, "box.result") <- eval(parse(file = "", 
-                                       text = attr(results, "box.call")))
-  attr(results, "adf.call") <- 
-	  'adf.test(time.series, alternative = "stationary")'
-  attr(results, "adf.result") <-  eval(parse(file = "", 
-                                        text = attr(results, "adf.call")))
-  attr(results, "kpss.call") <- 
-	  'kpss.test(time.series)'
-  attr(results, "kpss.result") <- eval(parse(file = "", 
-                                        text = attr(results, "kpss.call")))
+  box.result <- eval(parse(file = "", text = box.call))
+  box.result$data.name <- time.series.name
   
-  return(results)
+  adf.call <- 
+	  'adf.test(time.series, alternative = "stationary")'
+  adf.result <-  eval(parse(file = "", text = adf.call))
+  adf.result$data.name <- time.series.name
+  
+  kpss.call <- 
+	  'kpss.test(time.series)'
+  kpss.result <- eval(parse(file = "", text = kpss.call))
+  kpss.result$data.name <- time.series.name
+  
+  structure(list(series.name = time.series.name,
+                 box.call = box.call, box.result = box.result,
+                 adf.call = adf.call, adf.result = adf.result,
+                 kpss.call = kpss.call, kpss.result = kpss.result), 
+            class = "StationarityTest")
 }
