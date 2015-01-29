@@ -4,39 +4,39 @@
 #' the Ljung-Box, Augmented Dickey-Fuller (ADF) and 
 #' Kwiatkowski-Phillips-Schmidt-Shin (KPSS) tests. 
 #'
-#' @param time.series a time series that should be tested.
+#' @param time.series Time series that should be tested.
+#' @param max.lag Maximum lag.
+#' @param advanced Determine whether advanced tests should be performed.
 #' @return object of class StationarityTest
 #' @export
 #' @examples
 #'  data(fred.totalunemployment)
 #'  result <- stationarity.test(fred.totalunemployment)
 
-stationarity.test <- function(time.series)
+stationarity.test <- function(time.series, max.lag = NULL, advanced = FALSE)
 {
   if (class(time.series) != "ts") {
     warning("time.series argument was not a time series.")
   }
   
-  # store the old par settings so that we can restore them at the end of the
-  # function.
-  old.par <- par(no.readonly = TRUE)
-  on.exit(par(old.par))
-  par(mfrow = c(2,1))
-  
   time.series.name <- deparse(substitute(time.series))
+
   
   # Load the packages so the tests can be generated.
-  Acf(time.series, main = paste(time.series.name))
-  Pacf(time.series, main = paste(time.series.name))
+  acf2.call <- paste("acf2.result <- as.data.frame(acf2(",
+                     time.series.name,", max.lag = max.lag))")
+  eval(parse(file = "", text = acf2.call))
   
-  
+  # Take the same lags as acf2. 
+  max.lag <- nrow(acf2.result)
+
   box.call <- 
-	  'Box.test(time.series, type = ("Ljung-Box"), lag = 20)'
+	  'Box.test(time.series, type = ("Ljung-Box"), lag = max.lag)'
   box.result <- eval(parse(file = "", text = box.call))
   box.result$data.name <- time.series.name
   
   adf.call <- 
-	  'adf.test(time.series, alternative = "stationary")'
+	  'adf.test(time.series, alternative = "stationary", k = max.lag)'
   adf.result <-  eval(parse(file = "", text = adf.call))
   adf.result$data.name <- time.series.name
   
@@ -48,6 +48,7 @@ stationarity.test <- function(time.series)
   structure(list(series.name = time.series.name,
                  box.call = box.call, box.result = box.result,
                  adf.call = adf.call, adf.result = adf.result,
-                 kpss.call = kpss.call, kpss.result = kpss.result), 
+                 kpss.call = kpss.call, kpss.result = kpss.result, 
+                 acf = acf2.result), 
             class = "StationarityTest")
 }
