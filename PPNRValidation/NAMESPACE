@@ -1,6 +1,10 @@
 S3method(print, StationarityTest)
+
 export(stationarity.test)
 export(ACF)
+
+
 import(forecast, tseries, zoo)
 importFrom(knitr, kable)
 importFrom(astsa, acf2)
+importFrom(fractal, stationarity)

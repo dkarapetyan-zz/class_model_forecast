@@ -40,6 +40,9 @@ print.StationarityTest <- function(object, format = NULL,
     print(object$box.result)
     print(object$adf.result)
     print(object$kpss.result)
+    if (!is.null(object$stationarity.result)) {
+      print(object$stationarity.result)
+    }
   } else {
     cat(kable(result, format = format, col.names = c("Test name", "Series",
                                                      "Test statistic",

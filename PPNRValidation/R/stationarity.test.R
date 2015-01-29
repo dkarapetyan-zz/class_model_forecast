@@ -2,7 +2,9 @@
 #' 
 #' This function plots the ACF and PACF plots for a time series and performs 
 #' the Ljung-Box, Augmented Dickey-Fuller (ADF) and 
-#' Kwiatkowski-Phillips-Schmidt-Shin (KPSS) tests. 
+#' Kwiatkowski-Phillips-Schmidt-Shin (KPSS) tests. If advanced tests are
+#' selected stationaritya.test will also perform the Priestley-Subba Rao test 
+#' \url{http://www.maths.bris.ac.uk/~guy/Research/LSTS/TOS.html}.
 #'
 #' @param time.series Time series that should be tested.
 #' @param max.lag Maximum lag.
@@ -44,11 +46,21 @@ stationarity.test <- function(time.series, max.lag = NULL, advanced = FALSE)
 	  'kpss.test(time.series)'
   kpss.result <- eval(parse(file = "", text = kpss.call))
   kpss.result$data.name <- time.series.name
+
+  stationarity.result <- NULL
+
+  if (advanced) {
+    stationarity.call <-
+      'stationarity(as.numeric(time.series))'
+    stationarity.result <- eval(parse(file = "", text = stationarity.call))
+    attr(stationarity.result, "series.name") <- time.series.name
+  }
   
   structure(list(series.name = time.series.name,
                  box.call = box.call, box.result = box.result,
                  adf.call = adf.call, adf.result = adf.result,
                  kpss.call = kpss.call, kpss.result = kpss.result, 
+                 stationarity.result = stationarity.result,
                  acf = acf2.result), 
             class = "StationarityTest")
 }
