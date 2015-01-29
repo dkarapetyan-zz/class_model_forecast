@@ -3,6 +3,9 @@ S3method(print, StationarityTest)
 export(stationarity.test)
 export(ACF)
 
+export(log.diff)
+export(log.diffinv)
+
 
 import(forecast, tseries, zoo)
 importFrom(knitr, kable)
