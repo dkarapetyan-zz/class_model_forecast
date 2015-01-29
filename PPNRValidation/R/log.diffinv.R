@@ -9,7 +9,7 @@
 #' @examples
 #'  a <- 2 : 20
 #'  a.log.diff <- log.diff(a)
-#'  log.diff.inv(a.log.diff, xi = a[1])
+#'  log.diffinv(a.log.diff, xi = a[1])
 
 log.diffinv <- function(series, xi, base = exp(1))
 {

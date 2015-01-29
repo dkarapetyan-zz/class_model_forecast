@@ -5,7 +5,7 @@
 #' @examples
 #'  data(fred.totalunemployment)
 #'  result <- stationarity.test(fred.totalunemployment)
-#'  acf(result)
+#'  ACF(result)
 
 ACF <- function(object, ...)
 {
