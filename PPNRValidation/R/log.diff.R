@@ -8,7 +8,6 @@
 #' @examples
 #'  a <- 2 : 20
 #'  log.diff(a)
-log.diff <- function(series, base = exp(1))
-{
+log.diff <- function(series, base = exp(1)) {
   diff(log(series, base = base))
 }

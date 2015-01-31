@@ -11,7 +11,6 @@
 #'  a.log.diff <- log.diff(a)
 #'  log.diffinv(a.log.diff, xi = a[1])
 
-log.diffinv <- function(series, xi, base = exp(1))
-{
-  c(xi, xi * base^cumsum(series))
+log.diffinv <- function(series, xi, base = exp(1)) {
+  c(xi, xi * base ^ cumsum(series))
 }

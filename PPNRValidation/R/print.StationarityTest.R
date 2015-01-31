@@ -1,6 +1,6 @@
 #' Prints the results of the stationarity tests.
-#' 
-#' This function prints the outcome of the various stationarity tests. 
+#'
+#' This function prints the outcome of the various stationarity tests.
 #'
 #' @param object The StationarityTest result.
 #' @param format The format the table in a format given by kable.
@@ -13,17 +13,16 @@
 #'  data(fred.totalunemployment)
 #'  result <- stationarity.test(fred.totalunemployment)
 #'  print(result)
-#'  
+#' 
 #'  print(result, format = "latex")
 #' @seealso knitr::kable
 #' @export
-print.StationarityTest <- function(object, format = NULL, 
-                                    return.statistics = FALSE, ...)
-{
+print.StationarityTest <- function(object, format = NULL,
+                                    return.statistics = FALSE, ...) {
   if (class(object) != "StationarityTest") {
     stop("object is expected to be of class StationarityTest.")
   }
-  
+ 
   result <- data.frame("Test.name" = c("Box-Ljung test",
                                        "Augmented Dickey-Fuller Test",
                                        "KPSS Test for Level Stationarity"),
@@ -35,7 +34,7 @@ print.StationarityTest <- function(object, format = NULL,
                                      object$adf.result$p.value,
                                      object$kpss.result$p.value)
   )
-  
+ 
   if (is.null(format)) {
     print(object$box.result)
     print(object$adf.result)
@@ -49,7 +48,7 @@ print.StationarityTest <- function(object, format = NULL,
                                                      "p-value"),
               row.names = FALSE))
   }
-  
+ 
   if(return.statistics) {
     return(return.statistics)
   }
