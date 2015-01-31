@@ -1,7 +1,7 @@
 # Makefile to use knitr for package vignettes
 
 # put all PDF targets here, separated by spaces
-PDFS= PPNRValidation-intro.pdf PPNRValidation-todo.pdf
+PDFS= ccar.development-intro.pdf ccar.development-todo.pdf
 
 all: $(PDFS) 
 

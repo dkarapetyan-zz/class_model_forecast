@@ -1,4 +1,4 @@
-Package: PPNRValidation
+Package: ccar.development
 Type: Package
 Title: The PPNRValidation package allows for easy validation of PPNR CCAR models.
 Version: 0.01
