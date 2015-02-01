@@ -1,4 +1,5 @@
 S3method(print, StationarityTest)
+S3method(print, MultiVariateAnalysis)
 
 export(stationarity.test)
 export(ACF)

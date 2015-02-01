@@ -1,33 +1,28 @@
 #' Performs several multi variate analysis on a time series matrix.
 #'
 #'
-multi.variate.analysis <- function(formula, data, ...) {
-  if (class(formula) != "formula") {
-    stop("Expect formula to be a formula")
+multi.variate.analysis <- function(data, ...) {
+  if (!(any(class(data) %in% c("matrix", "data.frame")))) {
+    warning("Will cast data to matrix.")
+    data <- as.matrix(data)
   }
 
-  # If the formula contains terms we check whether these are present in the
-  # data to give a sensible error message to the user.
-  options(show.error.messages = FALSE)
-  try(terms_in_formula <- colnames(attr(terms(formula), "factor")))
-  options(show.error.messages = TRUE)
-
-  if (exists("terms_in_formula")) {
-    # Verify whether all the terms in the formula are present in the data.
-    if (!all(terms_in_formula %in% colnames(data))) {
-      stop("not all the terms in the formula are present in the data")
-    }
-  }
-
-  # Deparse the formula and data so that they can be passed to the functions.
-  deparsed_formula <- deparse(formula)
+  data_name <- deparse(substitute(data))
   # Perform a colinearity analysis.
-  cond.index.call <- paste("cond.index(", deparsed_formula,
-                           ", data,  ...)")
-  cond.index.result <- eval(parse(file = "", text = cond.index.call))
+  vif.call <- paste("vif(", data_name, ",  ...)")
+  vif.result <- try(eval(parse(file = "", text = vif.call)))
 
-  structure(list(formula = deparsed_formula,
-                 cond.index.call = cond.index.call,
-                 cond.index.result = cond.index.result),
+  cor.call <- paste("cor(", data_name, ", ...)")
+  cor.result <- try(eval(parse(file = "", text = cor.call)))
+
+  prcomp.call <- paste("prcomp(", data_name, ", ...)")
+  prcomp.result <- try(eval(parse(file = "", text = prcomp.call)))
+
+  structure(list(vif.call = vif.call,
+                 vif.result = vif.result,
+                 cor.call = cor.call,
+                 cor.result = cor.result,
+                 prcomp.call = prcomp.call,
+                 prcomp.result = prcomp.result),
             class = "MultiVariateAnalysis")
 }
