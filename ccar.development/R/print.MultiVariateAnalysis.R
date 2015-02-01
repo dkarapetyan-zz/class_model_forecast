@@ -1,6 +1,31 @@
 #' Prints results from multi variate analysis.
 #'
+#' This function displays all the results computed by the
+#' multi.variate.analysis function. It allows to format the results directly to
+#' any format supported by knitr::kable.
+#' 
+#' @param object The object that holds the multi variate analysis.
+#' @param format The knitr format to use to display the information if NULL is
+#' passed the function will call the default print functions for each object.
+#' @param return.statistics Determine whether the statistics are returned as
+#' data frame.
+#' @param pretty.varnames Define variable names that will be used in knitr
+#' tables.
+#' @param print.results Which results to print.
+#' @param print.all.tables Print all the knitr tables.
+#' @param ... Arguments passed to knitr::kable.
 #'
+#' @examples
+#'  df <- data.frame(a = 1 : 10, b = 2 * rnorm(10))
+#'  res <- multi.variate.analysis(df)
+#'  print(res)
+#'  print(res, format = 'latex', 
+#'    pretty.varnames = c("sequence", "random number"), 
+#'    print.all.tables = TRUE)
+#'
+#' @seealso \code{\link{knitr::kable}}
+#'
+#' @export
 print.MultiVariateAnalysis <- function(object, format = NULL,
                                     return.statistics = FALSE, 
                                     pretty.varnames = NULL,
@@ -14,6 +39,7 @@ print.MultiVariateAnalysis <- function(object, format = NULL,
 
   .return_statistics <- list()
   .return_tables <- list()
+
   show_results <- 
     defmacro(object_attribute, 
              test_name, 
@@ -138,7 +164,7 @@ print.MultiVariateAnalysis <- function(object, format = NULL,
 
   .to_return <- list()
   if (!is.null(format)) {
-    .to_return[["kable.tables"]] <- .return.tables
+    .to_return[["kable.tables"]] <- .return_tables
   }
   if (return.statistics) {
     .to_return[["statistics"]] <- .return_statistics

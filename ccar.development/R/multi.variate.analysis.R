@@ -1,5 +1,16 @@
 #' Performs several multi variate analysis on a time series matrix.
+#' 
+#' Currently the test will run a VIF, correlation and principal component
+#' analysis on the data specified.
+#' @param data The data that should be used in the analysis.
+#' @param ...  Extra arguments passed to vif, cor, prcomp
+#' @examples
+#'  df <- data.frame(a = 1 : 10, b = 2 * rnorm(10))
+#'  res <- multi.variate.analysis(df)#'
 #'
+#' @seealso \code{\link{usdm::vif}} 
+#' @seealso \code{\link{stats::cor}} 
+#' @seealso \code{\link{stats::prcomp}} 
 #'
 multi.variate.analysis <- function(data, ...) {
   if (!(any(class(data) %in% c("matrix", "data.frame")))) {
