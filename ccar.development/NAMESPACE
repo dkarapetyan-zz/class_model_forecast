@@ -1,8 +1,8 @@
 S3method(print, StationarityTest)
+S3method(ACF, StationarityTest)
 S3method(print, MultiVariateAnalysis)
 
 export(stationarity.test)
-export(ACF)
 export(multi.variate.analysis)
 
 export(log.diff)
@@ -11,7 +11,7 @@ export(in.sample.log.diffinv)
 export(in.sample.diffinv)
 
 
-import(forecast, tseries, zoo)
+import(forecast, tseries)
 importFrom(knitr, kable)
 importFrom(astsa, acf2)
 importFrom(fractal, stationarity)

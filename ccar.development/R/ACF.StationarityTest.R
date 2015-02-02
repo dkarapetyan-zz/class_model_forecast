@@ -7,7 +7,7 @@
 #'  result <- stationarity.test(fred.totalunemployment)
 #'  ACF(result)
 
-ACF <- function(object) {
+ACF.StationarityTest <- function(object) {
   if (class(object) != "StationarityTest") {
     stop("object is expected to be of class StationarityTest.")
   }
