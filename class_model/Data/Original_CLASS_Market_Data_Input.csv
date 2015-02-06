@@ -1,0 +1,23 @@
+Variable,Annualized.Real.GDP.growth,Nominal.GDP.growth,Real.disposable.income.growth,Nominal.disposable.income.growth,Unemployment.rate,CPI.inflation.rate,X3.month Treasury Yield,X5.year.Treasury.yield,Quarterly.change.in.10.year.Treasury.yield,BBB.corporate.yield,Quarterly.change.in.BBB.bond.spread,Quarterly.change.in.BBB.Spread.if.change.is.positive,Interaction.BBB.Spread.change.and.Risky.AFS  ,Mortgage.rate,Prime.rate,Dow.Jones.Total.Stock.Market.Index.(Level),House.Price.Index.(Level),Commercial.Real.Estate.Price.Index.(Level),Market.Volatility.Index.(Level),Term.Spread,Home.price.growth,Home.price.growth.if.growth.is.negative,Commercial.Property.Price.Growth,Commercial.Property.Price.Growth.Negative,Annualized.Change.in.Unemployment,Stock.Market.returns,Lagged.dependent.variable,Time.trend,Residential.RE.Loans.Ratio,Commercial.RE.Loans.Ratio,CI.Loans.Ratio,Credit.Card.Loans.Ratio,Trading.Assets.Ratio,Securities.Ratio,Asset.Share
+Net.Interest.Margin,0,0,0,0,0,0,0.022,0,0,0,0,0,0,0,0,0,0,0,0,0.0426,0,0,0,0,0,0,0.793,-0.00528,0.00476,0.00648,0.00685,0.0184,-0.00626,0.00393,0.00743
+Noninterest.Nontrading.Income.Ratio,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.00407,0.904,0,-0.00155,-0.00364,-0.000877,0.0099,-0.00146,0.00309,-0.00581
+Return.on.Trading.Assets,0,0,0,0,0,0,0,0,0,0,-0.671,-2.559,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.284,0,0,0,0,0,0,0,0
+Compensation.Noninterest.Expense.Ratio,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.00345,0.894,0,-0.000722,-0.00109,-0.000229,-0.00115,-0.00252,-0.00172,-0.0000207
+Fixed.Asset.Noninterest.Expense.Ratio,0.000552,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.853,-0.00186,-0.000321,-0.000328,-0.00047,-0.000554,-0.00129,-0.000853,-0.0000756
+Other.Noninterest.Expense.Ratio,0,0,0,0,0,0,0,0,0,0,0.179,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.816,0,-0.00227,-0.000938,-0.00171,0.0153,-0.000807,0.00886,-0.00369
+Return.on.AFS.Securities,0,0,0,0,0,0,0,0,-0.58,0,0,0,-0.031,0,0,0,0,0,0,0,0,0,0,0,0,0,0.128,0,0,0,0,0,0,0,0
+FirstLien.Residential.Real.Estate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.00147,-0.0192,0,0,0,0,0.884,0,0,0,0,0,0,0,0
+Junior.Lien.Residential.Real.Estate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0153,-0.0671,0,0,0,0,0.867,0,0,0,0,0,0,0,0
+HELOC.Residential.Real.Estate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.00492,-0.0284,0,0,0,0,0.893,0,0,0,0,0,0,0,0
+Construction.Commercial.Real.Estate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0473,0,0,0.801,0,0,0,0,0,0,0,0
+Multifamily.Commercial.Real.Estate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.0114,0,0,0.776,0,0,0,0,0,0,0,0
+NonFarm.NonResidential.CRE,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.00928,0,0,0.823,0,0,0,0,0,0,0,0
+Credit.Card,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.359,0,0.856,0,0,0,0,0,0,0,0
+Other.Consumer,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.15,0,0.701,0.0191,0,0,0,0,0,0,0
+CI,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.133,0,0.798,0,0,0,0,0,0,0,0
+Leases,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.102,0,0.635,0,0,0,0,0,0,0,0
+Other.Real.Estate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-0.00933,-0.00365,0,0,0.573,0,0,0,0,0,0,0,0
+Loans.to.Foreign.Governments,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.051,0,0.351,0,0,0,0,0,0,0,0
+Agriculture,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0297,0,0.597,0,0,0,0,0,0,0,0
+Loans.to.Depository.Institutions,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.087,0,0.574,0,0,0,0,0,0,0,0
+Other,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.117,0,0.558,0,0,0,0,0,0,0,0
