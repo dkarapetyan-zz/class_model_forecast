@@ -150,6 +150,54 @@ for (i in (c(3, 8:22))) {
     coeff.new[i, 1]
 }
 
+########### Capital Forecast Model Calibration
+
+for (i in (c(3, 8:22))) {
+    Y.data <- NCO.response[, c("Time.trend", as.character(coeff.new[i, 1]))]
+    Y1.data <- merge(Y.data, macro.input.data[, -c(1, 2)], by = "Time.trend", all = TRUE)
+    # Y2.data=merge(Y1.data, ratio.input.data[,-c(1,3)],by='Time.trend',all = TRUE)
+    
+    # response variable
+    y <- Y.data[, as.character(coeff.new[i, 1])]
+    listNA <- c(which(y == "-Inf"), which(y == "Inf"), which(y == "NaN"))
+    y[listNA] <- NA
+    Y.data[, as.character(coeff.new[i, 1])] <- y
+    
+    # x- risk drivers
+    list <- names(coeff.data)[which(coeff.data[i, ] != 0)][-1]
+    # read the x input for the variables
+    L <- length(list)
+    x.list <- matrix(NA, ncol = L, nrow = length(y))
+    colnames(x.list) <- list
+    
+    for (j in (1:L)) {
+        if (list[j] == "Lagged.dependent.variable") 
+            # {x.list[,j]= c(y[-1],NA)}
+        {
+            x.list[, j] <- c(NA, y[-length(y)])
+        }
+        # if (list[j]== 'Time.trend') {x.list[,j] = T0 + 0.25*t}
+        
+        if (list[j] %in% colnames(Y1.data)) {
+            x.list[, j] <- Y1.data[, list[j]]
+        }
+        
+    }
+    
+    
+    res <- lm(y ~ x.list)
+    
+    summary(res)
+    
+    for (j in (1:L)) {
+        coeff.new[i, list[j]] <- res$coef[1 + which(colnames(x.list) == list[j])]
+    }
+    coeff.new[i, "Intercept"] <- res$coef[1]
+    coeff.new[i, 1]
+}
+
+
+
 
 write.csv(coeff.new, row.names = FALSE, file = "C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Intercept.csv")
 write.csv(coeff.new, row.names = FALSE, file = "C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Intercept.csv")

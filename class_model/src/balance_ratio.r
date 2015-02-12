@@ -3,7 +3,7 @@
 ## model.
 
 T <- 4 * (2014 + 0.75 - 1991)
-setwd("C:/ppnr.quant.repo/class_model/data")
+setwd("C:/ppnr.quant.repo/class_model/data/")
 list.files()
 data.PPNR <- read.csv(skip = 1, "CLASS_PPNR_Calibration_Data.csv")
 data.NCO <- read.csv(skip = 1, "CLASS_NCO_Calibration_Data.csv")
@@ -71,7 +71,7 @@ length(which(data3$Other.RE.Loans < 0))  # 5
 data_200 <- data3[which(data3$Flag == 1), ]
 data_201 <- data3[-which(data3$Flag == 1), ]
 
-setwd("H:/EY/CLASS Model/Calibration/Data")
+setwd("C:/ppnr.quant.repo/class_model/data/")
 data_Asset <- read.csv("CLASS_Industry_Asset_Data.csv")
 
 data_Asset$Year <- as.numeric(substr(data_Asset$Period, 1, 4))
