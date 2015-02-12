@@ -1,6 +1,6 @@
 
 T <- 4 * (2014 + 0.75 - 1991)
-setwd("C:/ppnr.quant.repo/Data")
+setwd("C:/ppnr.quant.repo/data")
 list.files()
 
 # load the coeffcients
@@ -8,7 +8,7 @@ coeff.data <- read.csv("Original_CLASS_Market_Data_Input.csv")
 names(coeff.data)
 
 
-setwd("H:/EY/CLASS Model/Calibration/Data/Input")
+setwd("C:/ppnr.quant.repo/data")
 list.files()
 # load PPNR and NCO response data
 PPNR.response <- read.csv("Response.PPNR.csv")
