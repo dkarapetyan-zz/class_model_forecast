@@ -153,7 +153,7 @@ for (i in (c(3, 8:22))) {
 ########### Capital Forecast Model Calibration
 
 for (i in (c(3, 8:22))) {
-    Y.data <- NCO.response[, c("Time.trend", as.character(coeff.new[i, 1]))]
+    Y.data <- Capital.response[, c("Time.trend", as.character(coeff.new[i, 1]))]
     Y1.data <- merge(Y.data, macro.input.data[, -c(1, 2)], by = "Time.trend", all = TRUE)
     # Y2.data=merge(Y1.data, ratio.input.data[,-c(1,3)],by='Time.trend',all = TRUE)
     
