@@ -1,4 +1,4 @@
-setwd("H:/EY/CLASS Model/Forecast/Data/Input")
+setwd("C:/ppnr.quant.repo/class_model/data/")
 Base.macro=read.csv("Base.macro.csv")
 Adverse.macro=read.csv("Adverse.macro.csv")
 Severely.Adverse.macro=read.csv("Severely.Adverse.macro.csv")

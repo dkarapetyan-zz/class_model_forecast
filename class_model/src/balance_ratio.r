@@ -2,7 +2,7 @@
 ## note that the balance sheets and asset share is used for PPNR model only. No need for NCO model.
 
 T=4*(2014+0.75-1991)
-setwd("H:/EY/CLASS Model/Calibration/Data")
+setwd("C:/ppnr.quant.repo/class_model/data")
 list.files()
 data.PPNR=read.csv(skip=1,"CLASS_PPNR_Calibration_Data.csv")
 data.NCO=read.csv(skip=1,"CLASS_NCO_Calibration_Data.csv")
@@ -326,4 +326,4 @@ for (tt in (1: T))
 summary(as.numeric(balance.ratio.mat.201[,10]))
 
 balance.ratio.mat=rbind(balance.ratio.mat.201,balance.ratio.mat.200)
-write.csv(balance.ratio.mat,file=paste(getwd(),"/Input/",  "BalanceRatio.csv", sep=''))
+write.csv(balance.ratio.mat,file=paste(getwd(), "BalanceRatio.csv", sep=''))

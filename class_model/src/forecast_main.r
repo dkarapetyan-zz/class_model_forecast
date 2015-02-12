@@ -1,7 +1,7 @@
 T=4*(2014+0.75-1991)
 T0=T/4
 
-setwd("H:/EY/CLASS Model/Calibration/Data/Input")
+setwd("C:/ppnr.quant.repo/class_model/data/")
 list.files()
 #load PPNR and NCO response data
 PPNR.response=read.csv("Response.PPNR.csv")
@@ -106,7 +106,7 @@ colnames(forecast.PPNR.base)=c(as.character(macro.data[,"Date"]),"SNL.Institutio
 		forecast.PPNR.base=rbind(forecast.PPNR.base,y.hat.mat)	
 	}	
 
-	write.csv(forecast.PPNR.base,file=paste("H:/EY/CLASS Model/Forecast/Data/Output/", "PPNR.ForecastOutput.Base.csv", sep=''))
+	write.csv(forecast.PPNR.base,file=paste("C:/ppnr.quant.repo/class_model/data/", "PPNR.ForecastOutput.Base.csv", sep=''))
 
 
 #######################################################################################
@@ -165,7 +165,7 @@ colnames(forecast.NCO.base)=c(as.character(macro.data[,"Date"]),"SNL.Institution
 	}	
 
 write.csv(forecast.NCO.base,
-				file=paste("H:/EY/CLASS Model/Forecast/Data/Output/","NCO.ForecastOutput.Base.csv", sep=''))
+				file=paste("C:/ppnr.quant.repo/class_model/data/","NCO.ForecastOutput.Base.csv", sep=''))
 
 
 
@@ -232,7 +232,7 @@ colnames(forecast.PPNR.adverse)=c(as.character(macro.data[,"Date"]),"SNL.Institu
 		forecast.PPNR.adverse=rbind(forecast.PPNR.adverse,y.hat.mat)	
 	}	
 
-	write.csv(forecast.PPNR.adverse,file=paste("H:/EY/CLASS Model/Forecast/Data/Output/", 
+	write.csv(forecast.PPNR.adverse,file=paste("C:/ppnr.quant.repo/class_model/data/", 
 "PPNR.ForecastOutput.Adverse.csv", sep=''))
 
 
@@ -292,7 +292,7 @@ colnames(forecast.NCO.adverse)=c(as.character(macro.data[,"Date"]),"SNL.Institut
 	}	
 
 write.csv(forecast.NCO.adverse,
-				file=paste("H:/EY/CLASS Model/Forecast/Data/Output/","NCO.ForecastOutput.Adverse.csv", sep=''))
+				file=paste("C:/ppnr.quant.repo/class_model/data/","NCO.ForecastOutput.Adverse.csv", sep=''))
 
 
 
@@ -368,7 +368,7 @@ colnames(forecast.PPNR.severely.adverse)=c(as.character(macro.data[,"Date"]),"SN
 		forecast.PPNR.severely.adverse=rbind(forecast.PPNR.severely.adverse,y.hat.mat)	
 	}	
 
-	write.csv(forecast.PPNR.severely.adverse,file=paste("H:/EY/CLASS Model/Forecast/Data/Output/", 
+	write.csv(forecast.PPNR.severely.adverse,file=paste("C:/ppnr.quant.repo/class_model/data/", 
 "PPNR.ForecastOutput.Severely.Adverse.csv", sep=''))
 
 
@@ -427,7 +427,7 @@ colnames(forecast.NCO.severely.adverse)=c(as.character(macro.data[,"Date"]),"SNL
 	}	
 
 write.csv(forecast.NCO.severely.adverse,
-				file=paste("H:/EY/CLASS Model/Forecast/Data/Output/","NCO.ForecastOutput.Severely.Adverse.csv", sep=''))
+				file=paste("C:/ppnr.quant.repo/class_model/data/","NCO.ForecastOutput.Severely.Adverse.csv", sep=''))
 
 
 

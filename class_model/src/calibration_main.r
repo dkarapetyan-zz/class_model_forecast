@@ -1,6 +1,6 @@
 
 T=4*(2014+0.75-1991)
-setwd("H:/EY/CLASS Model/Calibration/Data")
+setwd("C:/ppnr.quant.repo/Data")
 list.files()
 
 #load the coeffcients
@@ -145,7 +145,7 @@ for ( i in (c(3,8: 22)))
 }
 
 
-write.csv(coeff.new, row.names=FALSE,file="H:/EY/CLASS Model/Forecast/Data/Input/CLASS_Market_Data_Input_Intercept.csv")
-write.csv(coeff.new, row.names=FALSE,file="H:/EY/CLASS Model/Calibration/Data/Output/CLASS_Market_Data_Input_Intercept.csv")
-write.csv(coeff.orig,row.names=FALSE,file="H:/EY/CLASS Model/Calibration/Data/Output/CLASS_Market_Data_Input_Orginal.csv")
+write.csv(coeff.new, row.names=FALSE,file="C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Intercept.csv")
+write.csv(coeff.new, row.names=FALSE,file="C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Intercept.csv")
+write.csv(coeff.orig,row.names=FALSE,file="C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Orginal.csv")
 

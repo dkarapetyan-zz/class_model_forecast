@@ -1,4 +1,4 @@
-setwd("H:/EY/CLASS Model/Calibration/Data")
+setwd("C:/ppnr.quant.repo/class_model/data/")
 
 data=read.csv("CLASS_MACRO_Calibration_Data_Jan31.csv")
 #Base.macro=read.csv("Base.macro.csv")
@@ -42,7 +42,7 @@ data$Commercial.Property.Price.Growth.Negative=ifelse(data$Commercial.Property.P
 data$Annualized.Change.in.Unemployment=NA
 data$Annualized.Change.in.Unemployment[-1]=diff(data$Unemployment.rate)*4
 
-write.csv(data,file=paste(getwd(),"/Input/",  "Macro.Historical.Input.csv", sep=''))
+write.csv(data,file=paste(getwd(), "Macro.Historical.Input.csv", sep=''))
 
 print(data[1:5,])
 

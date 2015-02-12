@@ -2,7 +2,7 @@
 
 
 T=4*(2014+0.75-1991)
-setwd("H:/EY/CLASS Model/Calibration/Data")
+setwd("C:/ppnr.quant.repo/class_model/data/")
 list.files()
 data.PPNR=read.csv(skip=1,"CLASS_PPNR_Calibration_Data.csv")
 data.NCO=read.csv(skip=1,"CLASS_NCO_Calibration_Data.csv")
@@ -657,10 +657,10 @@ for (tt in (1:T))
 
 Y.mat.NCO=cbind(Y.mat.NCO,Return.on.Trading.Assets)
 summary(Y.mat.NCO)
-write.csv(Y.mat.NCO,file=paste(getwd(),"/Input/",  "Response.NCO.csv", sep=''))
+write.csv(Y.mat.NCO,file=paste(getwd(), "Response.NCO.csv", sep=''))
 
 Response.PPNR=rbind(Y.mat.200.PPNR,Y.mat.201.PPNR)
-write.csv(Response.PPNR, file=paste(getwd(),"/Input/",  "Response.PPNR.csv", sep=''))
+write.csv(Response.PPNR, file=paste(getwd(), "Response.PPNR.csv", sep=''))
 
 dim(Y.mat.NCO)
 #NCO.stepoff=Y.mat.NCO[which(Y.mat.NCO[,"Time.trend"]==T/4),]
