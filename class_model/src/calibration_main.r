@@ -1,92 +1,92 @@
 
-T <- 4 * (2014 + 0.75 - 1991)
-setwd("C:/ppnr.quant.repo/data")
+t <- 4 * (2014 + 0.75 - 1991)
+setwd("c:/ppnr.quant.repo/data")
 list.files()
 
 # load the coeffcients
-coeff.data <- read.csv("Original_CLASS_Market_Data_Input.csv")
+coeff.data <- read.csv("original_class_market_data_input.csv")
 names(coeff.data)
 
 
-setwd("C:/ppnr.quant.repo/data")
+setwd("c:/ppnr.quant.repo/data")
 list.files()
-# load PPNR and NCO response data
-PPNR.response <- read.csv("Response.PPNR.csv")
-PPNR.response$SNL.Institution.Key <- ifelse(!is.na(PPNR.response$SNL.Institution.Key), PPNR.response$SNL.Institution.Key, 
+# load ppnr and nco response data
+ppnr.response <- read.csv("response.ppnr.csv")
+ppnr.response$snl.institution.key <- ifelse(!is.na(ppnr.response$snl.institution.key), ppnr.response$snl.institution.key, 
     0)
-NCO.response <- read.csv("Response.NCO.csv")
+nco.response <- read.csv("response.nco.csv")
 
 # load the balance ratio data
-ratio.input.data <- read.csv("BalanceRatio.csv")
+ratio.input.data <- read.csv("balanceratio.csv")
 dim(ratio.input.data)
 names(ratio.input.data)
-ratio.input.data$SNL.Institution.Key <- ifelse(!is.na(ratio.input.data$SNL.Institution.Key), 
-    ratio.input.data$SNL.Institution.Key, 0)
+ratio.input.data$snl.institution.key <- ifelse(!is.na(ratio.input.data$snl.institution.key), 
+    ratio.input.data$snl.institution.key, 0)
 
 
 # load the macro data
-macro.input.data <- read.csv("Macro.Historical.Input.csv")
+macro.input.data <- read.csv("macro.historical.input.csv")
 names(macro.input.data)
 
 
-list.keep <- which(colSums(coeff.data[, -1]) != 0)
-coeff.orig <- coeff.data[, c("Variable", colnames(coeff.data[, (list.keep + 1)]))]
+list.keep <- which(colsums(coeff.data[, -1]) != 0)
+coeff.orig <- coeff.data[, c("variable", colnames(coeff.data[, (list.keep + 1)]))]
 
 coeff.new <- matrix(0, ncol = length(list.keep) + 2, nrow = nrow(coeff.data))
-colnames(coeff.new) <- c("Variable", colnames(coeff.data[, (list.keep + 1)]), "Intercept")
+colnames(coeff.new) <- c("variable", colnames(coeff.data[, (list.keep + 1)]), "intercept")
 coeff.new[, 1] <- as.character(coeff.data[, 1])
 
 # define the function to calculate the lagged variables
-lag1.fun <- function(y, y.name, data = PPNR.response) {
-    y.lag <- array(NA, length(y))
+lag1.fun <- function(y, y.name, data = ppnr.response) {
+    y.lag <- array(na, length(y))
     for (ii in (1:length(y))) {
-        Time.trend1 <- data$Time.trend[ii] - 0.25
-        if (Time.trend1 == 0) {
-            y.lag[ii] == NA
+        time.trend1 <- data$time.trend[ii] - 0.25
+        if (time.trend1 == 0) {
+            y.lag[ii] == na
         }
-        if (Time.trend1 > 0) {
-            SNL <- data$SNL.Institution.Key[ii]
-            y.lag[ii] <- data[which((data$SNL.Institution.Key == SNL) + (data$Time.trend == 
-                Time.trend1) == 2), y.name]
+        if (time.trend1 > 0) {
+            snl <- data$snl.institution.key[ii]
+            y.lag[ii] <- data[which((data$snl.institution.key == snl) + (data$time.trend == 
+                time.trend1) == 2), y.name]
         }
     }
     return(y.lag = y.lag)
 }
 
 
-########### PPNR model calibration
+########### ppnr model calibration
 
 for (i in c(1:2, 4:7)) {
-    Y.data <- PPNR.response[, c("Time.trend", as.character(coeff.new[i, 1]), "SNL.Institution.Key")]
-    Y1.data <- merge(Y.data, macro.input.data[, -c(1, 2)], by = "Time.trend", all = TRUE)
-    Y2.data <- merge(Y1.data, ratio.input.data[, -c(1, 3)], by = c("Time.trend", "SNL.Institution.Key"), 
-        all = TRUE)
+    y.data <- ppnr.response[, c("time.trend", as.character(coeff.new[i, 1]), "snl.institution.key")]
+    y1.data <- merge(y.data, macro.input.data[, -c(1, 2)], by = "time.trend", all = true)
+    y2.data <- merge(y1.data, ratio.input.data[, -c(1, 3)], by = c("time.trend", "snl.institution.key"), 
+        all = true)
     
     # response variable
-    y <- Y2.data[, as.character(coeff.new[i, 1])]
-    listNA <- c(which(y == "-Inf"), which(y == "Inf"), which(y == "NaN"))
-    y[listNA] <- NA
-    Y2.data[, as.character(coeff.new[i, 1])] <- y
+    y <- y2.data[, as.character(coeff.new[i, 1])]
+    listna <- c(which(y == "-inf"), which(y == "inf"), which(y == "nan"))
+    y[listna] <- na
+    y2.data[, as.character(coeff.new[i, 1])] <- y
     
     # x- risk drivers
     list <- names(coeff.data)[which(coeff.data[i, ] != 0)][-1]
     # read the x input for the variables
-    L <- length(list)
-    x.list <- matrix(NA, ncol = L, nrow = length(y))
+    l <- length(list)
+    x.list <- matrix(na, ncol = l, nrow = length(y))
     colnames(x.list) <- list
     
-    for (j in (1:L)) {
-        if (list[j] == "Lagged.dependent.variable") {
-            x.list[, j] <- lag1.fun(y = y, y.name = as.character(coeff.new[i, 1]), data = Y2.data)
+    for (j in (1:l)) {
+        if (list[j] == "lagged.dependent.variable") {
+            x.list[, j] <- lag1.fun(y = y, y.name = as.character(coeff.new[i, 1]), data = y2.data)
         }
         
-        # if (list[j]== 'Time.trend') {x.list[,j] = T0 + 0.25*t}
+        # if (list[j]== 'time.trend') {x.list[,j] = t0 + 0.25*t}
         
-        if (list[j] == "Interaction.BBB.Spread.change.and.Risky.AFS") {
-            x.list[, j] <- Y2.data$Quarterly.change.in.BBB.Spread.if.change.is.positive * Y2.data$Risky.AFS.Ratio/100
+        if (list[j] == "interaction.bbb.spread.change.and.risky.afs") {
+            x.list[, j] <- y2.data$quarterly.change.in.bbb.spread.if.change.is.positive * y2.data$risky.afs.ratio/100
         }
-        if (list[j] %in% colnames(Y2.data)) {
-            x.list[, j] <- Y2.data[, list[j]]
+        if (list[j] %in% colnames(y2.data)) {
+            x.list[, j] <- y2.data[, list[j]]
         }
         
     }
@@ -96,44 +96,44 @@ for (i in c(1:2, 4:7)) {
     summary(res)
     
     
-    for (j in (1:L)) {
+    for (j in (1:l)) {
         coeff.new[i, list[j]] <- res$coef[1 + which(colnames(x.list) == list[j])]
     }
-    coeff.new[i, "Intercept"] <- res$coef[1]
+    coeff.new[i, "intercept"] <- res$coef[1]
 }
 
 
 
-########### NCO model calibration
+########### nco model calibration
 
 for (i in (c(3, 8:22))) {
-    Y.data <- NCO.response[, c("Time.trend", as.character(coeff.new[i, 1]))]
-    Y1.data <- merge(Y.data, macro.input.data[, -c(1, 2)], by = "Time.trend", all = TRUE)
-    # Y2.data=merge(Y1.data, ratio.input.data[,-c(1,3)],by='Time.trend',all = TRUE)
+    y.data <- nco.response[, c("time.trend", as.character(coeff.new[i, 1]))]
+    y1.data <- merge(y.data, macro.input.data[, -c(1, 2)], by = "time.trend", all = true)
+    # y2.data=merge(y1.data, ratio.input.data[,-c(1,3)],by='time.trend',all = true)
     
     # response variable
-    y <- Y.data[, as.character(coeff.new[i, 1])]
-    listNA <- c(which(y == "-Inf"), which(y == "Inf"), which(y == "NaN"))
-    y[listNA] <- NA
-    Y.data[, as.character(coeff.new[i, 1])] <- y
+    y <- y.data[, as.character(coeff.new[i, 1])]
+    listna <- c(which(y == "-inf"), which(y == "inf"), which(y == "nan"))
+    y[listna] <- na
+    y.data[, as.character(coeff.new[i, 1])] <- y
     
     # x- risk drivers
     list <- names(coeff.data)[which(coeff.data[i, ] != 0)][-1]
     # read the x input for the variables
-    L <- length(list)
-    x.list <- matrix(NA, ncol = L, nrow = length(y))
+    l <- length(list)
+    x.list <- matrix(na, ncol = l, nrow = length(y))
     colnames(x.list) <- list
     
-    for (j in (1:L)) {
-        if (list[j] == "Lagged.dependent.variable") 
-            # {x.list[,j]= c(y[-1],NA)}
+    for (j in (1:l)) {
+        if (list[j] == "lagged.dependent.variable") 
+            # {x.list[,j]= c(y[-1],na)}
         {
-            x.list[, j] <- c(NA, y[-length(y)])
+            x.list[, j] <- c(na, y[-length(y)])
         }
-        # if (list[j]== 'Time.trend') {x.list[,j] = T0 + 0.25*t}
+        # if (list[j]== 'time.trend') {x.list[,j] = t0 + 0.25*t}
         
-        if (list[j] %in% colnames(Y1.data)) {
-            x.list[, j] <- Y1.data[, list[j]]
+        if (list[j] %in% colnames(y1.data)) {
+            x.list[, j] <- y1.data[, list[j]]
         }
         
     }
@@ -143,43 +143,43 @@ for (i in (c(3, 8:22))) {
     
     summary(res)
     
-    for (j in (1:L)) {
+    for (j in (1:l)) {
         coeff.new[i, list[j]] <- res$coef[1 + which(colnames(x.list) == list[j])]
     }
-    coeff.new[i, "Intercept"] <- res$coef[1]
+    coeff.new[i, "intercept"] <- res$coef[1]
     coeff.new[i, 1]
 }
 
-########### Capital Forecast Model Calibration
+########### capital forecast model calibration
 
 for (i in (c(3, 8:22))) {
-    Y.data <- Capital.response[, c("Time.trend", as.character(coeff.new[i, 1]))]
-    Y1.data <- merge(Y.data, macro.input.data[, -c(1, 2)], by = "Time.trend", all = TRUE)
-    # Y2.data=merge(Y1.data, ratio.input.data[,-c(1,3)],by='Time.trend',all = TRUE)
+    y.data <- capital.response[, c("time.trend", as.character(coeff.new[i, 1]))]
+    y1.data <- merge(y.data, macro.input.data[, -c(1, 2)], by = "time.trend", all = true)
+    # y2.data=merge(y1.data, ratio.input.data[,-c(1,3)],by='time.trend',all = true)
     
     # response variable
-    y <- Y.data[, as.character(coeff.new[i, 1])]
-    listNA <- c(which(y == "-Inf"), which(y == "Inf"), which(y == "NaN"))
-    y[listNA] <- NA
-    Y.data[, as.character(coeff.new[i, 1])] <- y
+    y <- y.data[, as.character(coeff.new[i, 1])]
+    listna <- c(which(y == "-inf"), which(y == "inf"), which(y == "nan"))
+    y[listna] <- na
+    y.data[, as.character(coeff.new[i, 1])] <- y
     
     # x- risk drivers
     list <- names(coeff.data)[which(coeff.data[i, ] != 0)][-1]
     # read the x input for the variables
-    L <- length(list)
-    x.list <- matrix(NA, ncol = L, nrow = length(y))
+    l <- length(list)
+    x.list <- matrix(na, ncol = l, nrow = length(y))
     colnames(x.list) <- list
     
-    for (j in (1:L)) {
-        if (list[j] == "Lagged.dependent.variable") 
-            # {x.list[,j]= c(y[-1],NA)}
+    for (j in (1:l)) {
+        if (list[j] == "lagged.dependent.variable") 
+            # {x.list[,j]= c(y[-1],na)}
         {
-            x.list[, j] <- c(NA, y[-length(y)])
+            x.list[, j] <- c(na, y[-length(y)])
         }
-        # if (list[j]== 'Time.trend') {x.list[,j] = T0 + 0.25*t}
+        # if (list[j]== 'time.trend') {x.list[,j] = t0 + 0.25*t}
         
-        if (list[j] %in% colnames(Y1.data)) {
-            x.list[, j] <- Y1.data[, list[j]]
+        if (list[j] %in% colnames(y1.data)) {
+            x.list[, j] <- y1.data[, list[j]]
         }
         
     }
@@ -189,16 +189,16 @@ for (i in (c(3, 8:22))) {
     
     summary(res)
     
-    for (j in (1:L)) {
+    for (j in (1:l)) {
         coeff.new[i, list[j]] <- res$coef[1 + which(colnames(x.list) == list[j])]
     }
-    coeff.new[i, "Intercept"] <- res$coef[1]
+    coeff.new[i, "intercept"] <- res$coef[1]
     coeff.new[i, 1]
 }
 
 
 
 
-write.csv(coeff.new, row.names = FALSE, file = "C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Intercept.csv")
-write.csv(coeff.new, row.names = FALSE, file = "C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Intercept.csv")
-write.csv(coeff.orig, row.names = FALSE, file = "C:/ppnr.quant.repo/class_model/data/CLASS_Market_Data_Input_Orginal.csv") 
+write.csv(coeff.new, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/class_market_data_input_intercept.csv")
+write.csv(coeff.new, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/class_market_data_input_intercept.csv")
+write.csv(coeff.orig, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/class_market_data_input_orginal.csv") 

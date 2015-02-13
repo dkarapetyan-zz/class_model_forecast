@@ -1,74 +1,74 @@
-#Take Sample of many macroeconomic variables, and munge so that we compute some
+#take sample of many macroeconomic variables, and munge so that we compute some
 #new variables that are crucial as inputs for our autoregression model. 
 
 
 
-setwd("C:/ppnr.quant.repo/class_model/data/")
-Base.macro <- read.csv("Base.macro.csv")
-Adverse.macro <- read.csv("Adverse.macro.csv")
-Severely.Adverse.macro <- read.csv("Severely.Adverse.macro.csv")
+setwd("c:/ppnr.quant.repo/class_model/data/")
+base.macro <- read.csv("base.macro.csv")
+adverse.macro <- read.csv("adverse.macro.csv")
+severely.adverse.macro <- read.csv("severely.adverse.macro.csv")
 
 
 
 
-Macro.Input.f <- function(scenario = "", data = "", start.Y = 2014, start.Q = 3) {
+macro.input.f <- function(scenario = "", data = "", start.y = 2014, start.q = 3) {
 
-  #First, declare all macroeconomic variables we will generate from the input
+  #first, declare all macroeconomic variables we will generate from the input
   #macroeconomic scenario data
  
 
-    data$Annualized.Real.GDP.growth <- NULL
-    data$Quarterly.change.in.10.year.Treasury.yield <- NULL
-    data$Quarterly.change.in.BBB.bond.spread <- NULL
-    data$Home.price.growth <- NULL
-    data$Commercial.Property.Price.Growth <- NULL
-    data$Stock.Market.returns <- NULL
-    data$Annualized.Change.in.Unemployment <- NULL
+    data$annualized.real.gdp.growth <- null
+    data$quarterly.change.in.10.year.treasury.yield <- null
+    data$quarterly.change.in.bbb.bond.spread <- null
+    data$home.price.growth <- null
+    data$commercial.property.price.growth <- null
+    data$stock.market.returns <- null
+    data$annualized.change.in.unemployment <- null
 
-    #Next, we run our computations for each variable, then append the variable
+    #next, we run our computations for each variable, then append the variable
     #to the end of the input market scenario spreadsheet "data"
 
-    data$Term.Spread <- (data$X10.year.Treasury.yield - data$X3.Month.Treasury.Yield)
+    data$term.spread <- (data$x10.year.treasury.yield - data$x3.month.treasury.yield)
     
     for (i in (4:nrow(data))) {
-        data$Annualized.Real.GDP.growth[i] <- sum(data$Real.GDP.growth[(i - 3):i])/4
+        data$annualized.real.gdp.growth[i] <- sum(data$real.gdp.growth[(i - 3):i])/4
     }
     
-    data$Quarterly.change.in.10.year.Treasury.yield[2:nrow(data)] <- diff(data$X10.year.Treasury.yield)
+    data$quarterly.change.in.10.year.treasury.yield[2:nrow(data)] <- diff(data$x10.year.treasury.yield)
     
-    data$Stock.Market.returns <- diff(log(data$Dow.Jones.Total.Stock.Market.Index..Level.))
+    data$stock.market.returns <- diff(log(data$dow.jones.total.stock.market.index..level.))
     
-    data$Quarterly.change.in.BBB.bond.spread <- diff(data$BBB.corporate.yield)
+    data$quarterly.change.in.bbb.bond.spread <- diff(data$bbb.corporate.yield)
    
     #returns maximum of quarterly change, and zero
-    data$Quarterly.change.in.BBB.Spread.if.change.is.positive <- ifelse(data$Quarterly.change.in.BBB.bond.spread < 
-        0, 0, data$Quarterly.change.in.BBB.bond.spread)
+    data$quarterly.change.in.bbb.spread.if.change.is.positive <- ifelse(data$quarterly.change.in.bbb.bond.spread < 
+        0, 0, data$quarterly.change.in.bbb.bond.spread)
     
     
     for (i in (5:nrow(data))) {
-        data$Home.price.growth[i] <- 100 * (log(data$House.Price.Index..Level.[i]) - log(data$House.Price.Index..Level.[i - 
+        data$home.price.growth[i] <- 100 * (log(data$house.price.index..level.[i]) - log(data$house.price.index..level.[i - 
             4]))
-        data$Commercial.Property.Price.Growth[i] <- 100 * (log(data$Commercial.Real.Estate.Price.Index..Level.[i]) - 
-            log(data$Commercial.Real.Estate.Price.Index..Level.[i - 4]))
+        data$commercial.property.price.growth[i] <- 100 * (log(data$commercial.real.estate.price.index..level.[i]) - 
+            log(data$commercial.real.estate.price.index..level.[i - 4]))
         
     }
     
-    data$Home.price.growth.if.growth.is.negative <- ifelse(data$Home.price.growth < 0, data$Home.price.growth, 
+    data$home.price.growth.if.growth.is.negative <- ifelse(data$home.price.growth < 0, data$home.price.growth, 
         0)
     
-    data$Commercial.Property.Price.Growth.Negative <- ifelse(data$Commercial.Property.Price.Growth < 
-        0, data$Commercial.Property.Price.Growth, 0)
+    data$commercial.property.price.growth.negative <- ifelse(data$commercial.property.price.growth < 
+        0, data$commercial.property.price.growth, 0)
     
-    data$Annualized.Change.in.Unemployment[-1] <- diff(data$Unemployment.rate) * 4
+    data$annualized.change.in.unemployment[-1] <- diff(data$unemployment.rate) * 4
     
-    data$Time.trend <- data$Quarter * 0.25 + (data$Year - 1991)
-    data <- data[which(data$Time.trend >= (start.Y - 1991) + 0.25 * start.Q), ]
-    write.csv(data, file = paste(getwd(), "/", scenario, "Macro.Model.Input.csv", sep = ""), 
-        row.names = FALSE)
+    data$time.trend <- data$quarter * 0.25 + (data$year - 1991)
+    data <- data[which(data$time.trend >= (start.y - 1991) + 0.25 * start.q), ]
+    write.csv(data, file = paste(getwd(), "/", scenario, "macro.model.input.csv", sep = ""), 
+        row.names = false)
     
     print(data[1:5, ])
 }
 
-Macro.Input.f(scenario = "Base", data = Base.macro)
-Macro.Input.f(scenario = "Adverse", data = Adverse.macro)
-Macro.Input.f(scenario = "Severely.Adverse", data = Severely.Adverse.macro) 
+macro.input.f(scenario = "base", data = base.macro)
+macro.input.f(scenario = "adverse", data = adverse.macro)
+macro.input.f(scenario = "severely.adverse", data = severely.adverse.macro) 

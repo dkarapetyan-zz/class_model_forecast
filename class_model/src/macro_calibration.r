@@ -1,51 +1,51 @@
-setwd("C:/ppnr.quant.repo/class_model/data/")
+setwd("c:/ppnr.quant.repo/class_model/data/")
 
-data <- read.csv("CLASS_MACRO_Calibration_Data_Jan31.csv")
-# Base.macro=read.csv('Base.macro.csv')
+data <- read.csv("class_macro_calibration_data_jan31.csv")
+# base.macro=read.csv('base.macro.csv')
 
 names(data)
 dim(data)
 
-data$Year <- as.numeric(substr(data$Period, 1, 4))
-data$Qt <- as.numeric(substr(data$Period, 6, 6))
-data$Time.trend <- data$Year - 1991 + 0.25 * data$Qt
+data$year <- as.numeric(substr(data$period, 1, 4))
+data$qt <- as.numeric(substr(data$period, 6, 6))
+data$time.trend <- data$year - 1991 + 0.25 * data$qt
 
-data$Term.Spread <- data$X10.year.Treasury.yield - data$X3.Month.Treasury.Yield
+data$term.spread <- data$x10.year.treasury.yield - data$x3.month.treasury.yield
 
-data$Quarterly.change.in.10.year.Treasury.yield <- NA
-data$Quarterly.change.in.10.year.Treasury.yield[2:nrow(data)] <- diff(data$X10.year.Treasury.yield)
+data$quarterly.change.in.10.year.treasury.yield <- na
+data$quarterly.change.in.10.year.treasury.yield[2:nrow(data)] <- diff(data$x10.year.treasury.yield)
 
-data$Stock.Market.returns <- NA
-data$Stock.Market.returns[-1] <- diff(log(data$Dow.Jones.Total.Stock.Market.Index..Level.))
+data$stock.market.returns <- na
+data$stock.market.returns[-1] <- diff(log(data$dow.jones.total.stock.market.index..level.))
 
-data$Quarterly.change.in.BBB.bond.spread <- NA
-data$Quarterly.change.in.BBB.bond.spread[-1] <- diff(data$BBB.corporate.yield)
+data$quarterly.change.in.bbb.bond.spread <- na
+data$quarterly.change.in.bbb.bond.spread[-1] <- diff(data$bbb.corporate.yield)
 
-data$Quarterly.change.in.BBB.Spread.if.change.is.positive <- ifelse(data$Quarterly.change.in.BBB.bond.spread < 
-    0, 0, data$Quarterly.change.in.BBB.bond.spread)
+data$quarterly.change.in.bbb.spread.if.change.is.positive <- ifelse(data$quarterly.change.in.bbb.bond.spread < 
+    0, 0, data$quarterly.change.in.bbb.bond.spread)
 
-data$Home.price.growth <- NA
-data$Commercial.Property.Price.Growth <- NA
+data$home.price.growth <- na
+data$commercial.property.price.growth <- na
 for (i in (5:nrow(data))) {
-    data$Home.price.growth[i] <- 100 * (log(data$House.Price.Index..Level.[i]) - log(data$House.Price.Index..Level.[i - 
+    data$home.price.growth[i] <- 100 * (log(data$house.price.index..level.[i]) - log(data$house.price.index..level.[i - 
         4]))
-    data$Commercial.Property.Price.Growth[i] <- 100 * (log(data$Commercial.Real.Estate.Price.Index..Level.[i]) - 
-        log(data$Commercial.Real.Estate.Price.Index..Level.[i - 4]))
+    data$commercial.property.price.growth[i] <- 100 * (log(data$commercial.real.estate.price.index..level.[i]) - 
+        log(data$commercial.real.estate.price.index..level.[i - 4]))
 }
 
-data$Home.price.growth.if.growth.is.negative <- ifelse(data$Home.price.growth < 0, data$Home.price.growth, 
+data$home.price.growth.if.growth.is.negative <- ifelse(data$home.price.growth < 0, data$home.price.growth, 
     0)
 
-data$Commercial.Property.Price.Growth.Negative <- ifelse(data$Commercial.Property.Price.Growth < 
-    0, data$Commercial.Property.Price.Growth, 0)
+data$commercial.property.price.growth.negative <- ifelse(data$commercial.property.price.growth < 
+    0, data$commercial.property.price.growth, 0)
 
-data$Annualized.Change.in.Unemployment <- NA
-data$Annualized.Change.in.Unemployment[-1] <- diff(data$Unemployment.rate) * 4
+data$annualized.change.in.unemployment <- na
+data$annualized.change.in.unemployment[-1] <- diff(data$unemployment.rate) * 4
 
-write.csv(data, file = paste(getwd(), "Macro.Historical.Input.csv", sep = ""))
+write.csv(data, file = paste(getwd(), "macro.historical.input.csv", sep = ""))
 
 print(data[1:5, ])
 
 
-### input data: 'CLASS_MACRO_Calibration_Data_Jan31.csv' output data: '.../CLASS
-### Model/Calibration/Data/Input/Macro.Historical.Input.csv' 
+### input data: 'class_macro_calibration_data_jan31.csv' output data: '.../class
+### model/calibration/data/input/macro.historical.input.csv' 
