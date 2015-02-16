@@ -1,4 +1,4 @@
-Period,Annualized.Real.GDP.growth,Nominal.GDP.growth,Real.disposable.income.growth,Nominal.disposable.income.growth,Unemployment.rate,CPI.inflation.rate,3.Month.Treasury.Yield,5.year.Treasury.yield,10.year.Treasury.yield,BBB.corporate.yield,Mortgage.rate,Prime.rate,Dow.Jones.Total.Stock.Market.Index.(Level),House.Price.Index.(Level),Commercial.Real.Estate.Price.Index.(Level),Market.Volatility.Index.(Level)
+Period,annualized.real.gdp.growth,Nominal.GDP.growth,Real.disposable.income.growth,Nominal.disposable.income.growth,Unemployment.rate,CPI.inflation.rate,3.Month.Treasury.Yield,5.year.Treasury.yield,10.year.Treasury.yield,BBB.corporate.yield,Mortgage.rate,Prime.rate,Dow.Jones.Total.Stock.Market.Index.(Level),House.Price.Index.(Level),Commercial.Real.Estate.Price.Index.(Level),Market.Volatility.Index.(Level)
 1991Q1,-1.86,2.12,0.86,2.87,6.6,3.02,6.21,7.65,8.02,9.91,9.5,9.19,3583.67,74.39,105.57,36.2
 1991Q2,3.14,5.99,2.79,4.99,6.83,2.4,5.74,7.78,8.13,9.67,9.53,8.67,3545.47,74.55,104.57,20.12
 1991Q3,1.93,4.96,1.46,4.23,6.87,3.08,5.54,7.49,7.94,9.32,9.28,8.4,3743.98,74.79,101.04,21.19
