@@ -1,7 +1,7 @@
 setwd("c:/ppnr.quant.repo/class_model/data/")
 
 data <- read.csv("class_macro_calibration_data_jan31.csv")
-# base.macro=read.csv('base.macro.csv')
+# base_macro=read.csv('base_macro.csv')
 
 names(data)
 dim(data)

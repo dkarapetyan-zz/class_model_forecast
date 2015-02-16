@@ -199,6 +199,6 @@ for (i in (c(3, 8:22))) {
 
 
 
-write.csv(coeff.new, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/class_market_data_input_intercept.csv")
-write.csv(coeff.new, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/class_market_data_input_intercept.csv")
-write.csv(coeff.orig, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/class_market_data_input_orginal.csv") 
+write.csv(coeff.new, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/market_data_intercept.csv")
+write.csv(coeff.new, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/market_data_intercept.csv")
+write.csv(coeff.orig, row.names = false, file = "c:/ppnr.quant.repo/class_model/data/market_data_orginal.csv") 

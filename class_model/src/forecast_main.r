@@ -26,16 +26,16 @@ setwd("h:/ey/class model/forecast/data/input")
 list.files()
 
 # load the macros
-base.macro.input.data <- read.csv("basemacro.model.input.csv")
-adverse.macro.input.data <- read.csv("adversemacro.model.input.csv")
+base_macro.input.data <- read.csv("basemacro.model.input.csv")
+adverse_macro.input.data <- read.csv("adversemacro.model.input.csv")
 severely.macro.input.data <- read.csv("severely.adversemacro.model.input.csv")
 
-dim(base.macro.input.data)
+dim(base_macro.input.data)
 
 
 
 # load the coeffcients
-coeff.data <- read.csv("class_market_data_input_intercept.csv")
+coeff.data <- read.csv("market_data_intercept.csv")
 names(coeff.data)
 # load the current ppnr and nco data output.current=read.csv('response.csv')
 # dim(output.current) names(output.current)
@@ -43,7 +43,7 @@ names(coeff.data)
 
 
 ############################################################ forecast under base scenario#######################
-macro.data <- base.macro.input.data
+macro.data <- base_macro.input.data
 t.forecast <- nrow(macro.data)
 
 
@@ -183,7 +183,7 @@ write.csv(forecast.nco.base, file = paste("c:/ppnr.quant.repo/class_model/data/"
 
 
 ######### forecast under adverse scenario
-macro.data <- adverse.macro.input.data
+macro.data <- adverse_macro.input.data
 t.forecast <- nrow(macro.data)
 
 ############ for ppnr except # 3 return on trading assets: ##########################

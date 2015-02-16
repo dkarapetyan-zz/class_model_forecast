@@ -5,8 +5,8 @@
 t <- 4 * (2014 + 0.75 - 1991)
 setwd("c:/ppnr.quant.repo/class_model/data/")
 list.files()
-data.ppnr <- read.csv(skip = 1, "class_ppnr_calibration_data.csv")
-data.nco <- read.csv(skip = 1, "class_nco_calibration_data.csv")
+data.ppnr <- read.csv(skip = 1, "ppnr_macro_calibration_data.csv")
+data.nco <- read.csv(skip = 1, "nco_macro_calibration_data.csv")
 intersect(colnames(data.ppnr), colnames(data.nco))
 
 
@@ -27,7 +27,7 @@ data1 <- merge(data1.ppnr, data.nco, by = c("period", "bank", "snl.institution.k
 
 names(data1)
 dim(data1)
-flag.data <- read.csv("class_institution_flag_data.csv")
+flag.data <- read.csv("institution_flag_data.csv")
 # sum(flag.data[,3]) #200, all the top banks are within
 tabulate(flag.data[, 3])
 # sum(as.numeric(as.character(flag.data[,3])),na.rm=true) # 200
