@@ -14,12 +14,15 @@ InputMacroMunger <- function(data = "", start.y = 2014, start.q = 3) {
   data <- read.csv(data)  
   colnames(data) <- gsub("\\.{2}.*$", "", colnames(data))   #delete ellipses and everything after from import
   colnames(data) <- lapply(colnames(data), tolower)      #change all variables to lowercase 
-
+data <- head(data, -1) #delete last row, which has gibberish
   
   #first, declare all macroeconomic variables we will generate from the input
   #macroeconomic scenario data
 
   munged.macro.data<-list()
+  munged.macro.data$date <- NULL
+  munged.macro.data$quarter <- NULL
+  munged.macro.data$year <- NULL
   munged.macro.data$annualized.real.gdp.growth <- NULL
   munged.macro.data$quarterly.change.in.10.year.treasury.yield <- NULL
   munged.macro.data$quarterly.change.in.bbb.bond.spread <- NULL
@@ -31,6 +34,9 @@ InputMacroMunger <- function(data = "", start.y = 2014, start.q = 3) {
   #next, we run our computations for each variable, then append the variable
   #to the end of the input market scenario spreadsheet "data"
 
+munged.macro.data$date <- data$date
+  munged.macro.data$quarter <- data$quarter
+  munged.macro.data$year <- data$year
   munged.macro.data$term.spread <- (data$x10.year.treasury.yield - data$x3.month.treasury.yield)
 
 
@@ -46,9 +52,9 @@ InputMacroMunger <- function(data = "", start.y = 2014, start.q = 3) {
 
   munged.macro.data$quarterly.change.in.bbb.bond.spread <- diff(data$bbb.corporate.yield)
 
-  #returns maximum of quarterly change, and zero
-  munged.macro.data$quarterly.change.in.bbb.spread.if.change.is.positive <- ifelse(data$quarterly.change.in.bbb.bond.spread < 
-                                                                      0, 0, data$quarterly.change.in.bbb.bond.spread)
+  #returns maximum of quarterly change, and zero. Seems unncessary, according to whitepaper
+#  munged.macro.data$quarterly.change.in.bbb.spread.if.change.is.positive <- ifelse(data$quarterly.change.in.bbb.bond.spread < 
+#                                                                      0, 0, data$quarterly.change.in.bbb.bond.spread)
 
 
   for (i in (1:(nrow(data)-4))) { # 3 entries of NA, with fourth entry corresponding to annual growth
@@ -57,11 +63,8 @@ InputMacroMunger <- function(data = "", start.y = 2014, start.q = 3) {
                                                        log(data$commercial.real.estate.price.index[i]))
   }
 
-  munged.macro.data$home.price.growth.if.growth.is.negative <- ifelse(data$home.price.growth < 0, data$home.price.growth, 
-                                                         0)
-
-  munged.macro.data$commercial.property.price.growth.negative <- ifelse(data$commercial.property.price.growth < 
-                                                           0, data$commercial.property.price.growth, 0)
+#  munged.macro.data$home.price.growth.if.growth.is.negative[4*i] <- min(munged.macro.data$home.price.growth[4*i], 0) 
+#  munged.macro.data$commercial.property.price.growth.negative[4*i] <- min(munged.macro.data$commercial.property.price.growth[4*i], 0)
 
   munged.macro.data$annualized.change.in.unemployment <- diff(data$unemployment.rate) * 4
 
