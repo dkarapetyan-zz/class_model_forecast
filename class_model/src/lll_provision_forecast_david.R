@@ -61,8 +61,3 @@ LLLForecast <- function(individual.forecasts) {
 	return (.lll.forecast.ts)
 }
 
-# Load the class_model_input time series.
-setwd("c:\\ppnr.quant.repo\\class_model\\data\\")
-load("lll_input.RData")
-
-LLLForecast(lll.input)
