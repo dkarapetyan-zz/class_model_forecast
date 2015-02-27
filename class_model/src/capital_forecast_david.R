@@ -12,7 +12,6 @@ CapitalForecast <- function(individual.forecasts)
 	}
 	
 	
-	# TODO write capital forecast.
 	
 	#create blank capital forecast time series
 	.capital.forecast.ts <- ts(matrix(NA, ncol = 8, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
@@ -39,7 +38,7 @@ CapitalForecast <- function(individual.forecasts)
 								.capital.forecast.ts[i-1, "Allowed.DTA" ], 0))
 		
 		.capital.forecast.ts[i, "Allowed.DTA"] <- (min(.capital.forecast.ts[i, "Taxes"], 0)
-		+ .capital.forecast.ts[i-1, "Allowed.DTA"])
+					+ .capital.forecast.ts[i-1, "Allowed.DTA"])
 		
 		.capital.forecast.ts[i, "Net.Income"] <- (.capital.forecast.ts[i, "Net.Income.Before.Tax"] - 
 					.capital.forecast.ts[i, "Taxes"] )	
@@ -55,10 +54,10 @@ CapitalForecast <- function(individual.forecasts)
 					-.capital.forecast.ts[1, "Capital"] + .capital.forecast.ts[1, "Tier.1.Common.Capital"] )
 		
 		.capital.forecast.ts[i, "Leverage.Ratio"] <- (.capital.forecast.ts[i, "Tier.1.Common.Capital"]
-				/(.total.assets * (1 + (0.0125*(i-1)))))
+					/(.total.assets * (1 + (0.0125*(i-1)))))
 		
 	}	
-View(.capital.forecast.ts)
+	View(.capital.forecast.ts)
 }
 
 # Load the class_model_input time series.
