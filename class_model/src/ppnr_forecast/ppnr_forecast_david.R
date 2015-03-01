@@ -6,12 +6,12 @@
 #for 2014Q3.
 
 
-PPNRForecast <- function(assets.forecast, assets.coefficients.forecast) {
+PPNRForecast <- function(revenue.forecast, revenue.coefficients.forecast) {
 	.required_colnames_assets <- c("Interest.Earning.Assets", "Trading.Assets", "Total.Assets")		
 	
 	
-	if (!all(.required_colnames_assets %in% colnames(assets.forecast))) {
-		stop("Not all required colnames were found in assets.forecast")
+	if (!all(.required_colnames_assets %in% colnames(revenue.forecast))) {
+		stop("Not all required colnames were found in revenue.forecast")
 	}
 	
 	.required_colnames_coeffs <- c( "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio",
@@ -19,8 +19,8 @@ PPNRForecast <- function(assets.forecast, assets.coefficients.forecast) {
 	"Other.Noninterest.Expense.Ratio", "Return.on.Trading.Assets")
 	
 	
-	if (!all(.required_colnames_coeffs %in% colnames(assets.coefficients.forecast))) {
-		stop("Not all required colnames were found in assets.coefficients.forecast")
+	if (!all(.required_colnames_coeffs %in% colnames(revenue.coefficients.forecast))) {
+		stop("Not all required colnames were found in revenue.coefficients.forecast")
 	}
 
 	
@@ -30,27 +30,27 @@ PPNRForecast <- function(assets.forecast, assets.coefficients.forecast) {
 					"Compensation.Exp", "Fixed.Asset.Exp", "Other.Exp", "PPNR")
 
 			#first column of our forecast is just our initial input data
-	Lag(.ppnr.forecast.ts)[,"Net.Interest.Income"] <- (Lag(assets.forecast)[,"Interest.Earning.Assets"]/400
-				*Lag(assets.coefficients.forecast)[,"Net.Interest.Margin"]) 
+	Lag(.ppnr.forecast.ts)[,"Net.Interest.Income"] <- (Lag(revenue.forecast)[,"Interest.Earning.Assets"]/400
+				*Lag(revenue.coefficients.forecast)[,"Net.Interest.Margin"]) 
 	
 	Lag(.ppnr.forecast.ts)[,"Non.Int.Non.Trade.Income"] <-
-			(Lag(assets.forecast)[,"Total.Assets"]/400
-				*Lag(assets.coefficients.forecast)[,"Noninterest.Nontrading.Income.Ratio"])
+			(Lag(revenue.forecast)[,"Total.Assets"]/400
+				*Lag(revenue.coefficients.forecast)[,"Noninterest.Nontrading.Income.Ratio"])
 	
 	Lag(.ppnr.forecast.ts)[,"Trading.Income"] <-
-			(Lag(assets.coefficients.forecast)[,"Return.on.Trading.Assets"]/400
-				*Lag(assets.forecast)[,"Trading.Assets"])
+			(Lag(revenue.coefficients.forecast)[,"Return.on.Trading.Assets"]/400
+				*Lag(revenue.forecast)[,"Trading.Assets"])
 	
-	Lag(.ppnr.forecast.ts)[,"Compensation.Exp"] <- (Lag(assets.forecast)[,"Total.Assets"]/400
-				*Lag(assets.coefficients.forecast)[,"Compensation.Noninterest.Expense.Ratio"])
+	Lag(.ppnr.forecast.ts)[,"Compensation.Exp"] <- (Lag(revenue.forecast)[,"Total.Assets"]/400
+				*Lag(revenue.coefficients.forecast)[,"Compensation.Noninterest.Expense.Ratio"])
 	
 	Lag(.ppnr.forecast.ts)[,"Fixed.Asset.Exp"] <-
-			(Lag(assets.coefficients.forecast)[,"Fixed.Asset.Noninterest.Expense.Ratio"]/400
-				*Lag(assets.forecast)[,"Total.Assets"])
+			(Lag(revenue.coefficients.forecast)[,"Fixed.Asset.Noninterest.Expense.Ratio"]/400
+				*Lag(revenue.forecast)[,"Total.Assets"])
 	
 	Lag(.ppnr.forecast.ts)[,"Other.Exp"] <-
-			(Lag(assets.coefficients.forecast)[,"Other.Noninterest.Expense.Ratio"]
-				*Lag(assets.forecast)[,"Total.Assets"])
+			(Lag(revenue.coefficients.forecast)[,"Other.Noninterest.Expense.Ratio"]
+				*Lag(revenue.forecast)[,"Total.Assets"])
 	
 	Lag(.ppnr.forecast.ts)[,"PPNR"] <-
 			(sum(Lag(.ppnr.forecast.ts[, 1:3])) - sum(Lag(.ppnr.forecast.ts[, 4:6])))
@@ -63,4 +63,4 @@ PPNRForecast <- function(assets.forecast, assets.coefficients.forecast) {
 #load("c:/ppnr.quant.repo/class_model/data/model_coefficients_ppnr.RData")
 #load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 
-#PPNRForecast(assets.forecast, model.coefficients.ppnr, macro.forecasts)
+#PPNRForecast(revenue.forecast, model.coefficients.ppnr, macro.forecasts)
