@@ -17,7 +17,6 @@ RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.fo
 			"Con..Tot.Comm...Ind.Loans...000.", "Con..Credit.Cards...Rel.Plans...000.", 
 			"Total.Trading.Assets...000.", "Total.Securities...000.")	
 	
-	#	
 	.required_colnames_model.coefficients.ppnr <-
 			c("FirstLien.Residential.Real.Estate", "Junior.Lien.Residential.Real.Estate", 
 					"HELOC.Residential.Real.Estate", "Construction.Commercial.Real.Estate", 
@@ -46,9 +45,23 @@ RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.fo
 	
 	#We now subset position data to use only the fields needed for ppnr. 
 	position.data <- position.data[1, .required_colnames_position]	
+
+	#generate process position data, to use in ppnr forecasting artithmetic
 	
-	
-	#create blank capital forecast time series
+.position.data.processed <- matrix(nrow=7, ncol=7)
+row.names(.position.data.processed) <- 
+		c("Residential.RE.Loans.Ratio", "Commercial.RE.Loans.Ratio", 
+				"CI.Loans.Ratio", "Credit.Card.Loans.Ratio", "Trading.Assets.Ratio", 
+				"Securities.Ratio", "Asset.Share")	
+colnames(.position.data.processed) <-
+c("B.S.Ratios", "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio", 
+		"Compensation.Noninterest.Expense.Ratio", "Fixed.Asset.Noninterest.Expense.Ratio", 
+		"Other.Noninterest.Expense.Ratio", "Return.on.Trading.Assets")
+
+.position.data.processed[, "B.S.Ratios"] <-
+		position.data[13:18]
+
+#create blank capital forecast time series
 	.revenue.coeff.forecast.ts <-
 			ts(matrix(NA, ncol = 6, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
 	colnames(.revenue.coeff.forecast.ts) <-
@@ -60,7 +73,20 @@ RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.fo
 	.nrows<-nrow(.revenue.coeff.forecast.ts) #for efficiency in looping
 	for(i in 1:.nrows) {
 		if (i==1) { #initial data for ppnr coefficients. Comes from arithmetic on position data
-				.revenue.coeff.forecast.ts[i,] <- revenue.coeff.forecast.input[i,]
+			.revenue.coeff.forecast.ts[i,"Net.Interest.Margin"] <-
+					position.data$U.S..RE..Tot.Cl.end.1.4.Family...000./
+						sum(position.data[1:5])*100	
+			
+				.revenue.coeff.forecast.ts[i,"Commercial.RE.Loans.Ratio"] <-
+						position.data$Con..Total.Real.Estate.Loans...000./
+						sum(position.data[1:5])*100	
+
+								
+				.revenue.coeff.forecast.ts[i,"CI.Loans.Ratio"] <-
+						position.data$
+
+
+				
 			}
 		else { # arithmetic
 			
