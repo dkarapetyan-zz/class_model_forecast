@@ -6,7 +6,7 @@
 #for 2014Q3.
 
 
-RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.forecasts ) {
+RevenueCoeffForecast<- function(position.data, model.coefficients, macro.forecasts ) {
 	
 	.required_colnames_position <- c("Interest.Bearing.Balances...000.", "Tot.Fed.Funds...Reverse.Repos...000.", 
 			"Total.Securities...000.", "Gross.Loans...Leases...000.", "Total.Trading.Assets...000.", 
@@ -15,9 +15,9 @@ RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.fo
 			"NIE..Premises...Fixed.Assets...000.", "Total.Noninterest.Expense...000.", 
 			"U.S..RE..Total.1.4.Fmly...000.", "Con..Total.Real.Estate.Loans...000.", 
 			"Con..Tot.Comm...Ind.Loans...000.", "Con..Credit.Cards...Rel.Plans...000.", 
-			"Total.Trading.Assets...000.", "Total.Securities...000.")	
+			"Total.Trading.Assets...000.", "Total.Securities...000.", "Asset.Share")	
 	
-	.required_colnames_model.coefficients.ppnr <-
+	.required_colnames_model.coefficients <-
 			c("FirstLien.Residential.Real.Estate", "Junior.Lien.Residential.Real.Estate", 
 					"HELOC.Residential.Real.Estate", "Construction.Commercial.Real.Estate", 
 					"Multifamily.Commercial.Real.Estate", "NonFarm.NonResidential.CRE", 
@@ -25,18 +25,23 @@ RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.fo
 					"Loans.to.Foreign.Governments", "Agriculture", "Loans.to.Depository.Institutions", 
 					"Other")	
 	
-	.required_colnames_macro <- c("Annualized.Change.in.Unemployment", 
-			"Quarterly.change.in.10.year.Treasury.yield", "Quarterly.change.in.BBB.bond.spread", 
-			"Quarterly.change.in.BBB.Spread.if.change.is.positive", "Stock.Market.returns", 
-			"Term.Spread", "Time.trend", "X3.Month.Treasury.Yield")
-			
-			
+	.required_colnames_macro <- c("Real.GDP.growth", "Nominal.GDP.growth", "Real.disposable.income.growth", 
+			"Nominal.disposable.income.growth", "Unemployment.rate", "CPI.inflation.rate", 
+			"X3.Month.Treasury.Yield", "X5.year.Treasury.yield", "X10.year.Treasury.yield", 
+			"BBB.corporate.yield", "Mortgage.rate", "Prime.rate", "Dow.Jones.Total.Stock.Market.Index..Level.", 
+			"House.Price.Index..Level.", "Commercial.Real.Estate.Price.Index..Level.", 
+			"Market.Volatility.Index..Level.", "Term.Spread", "Annualized.Real.GDP.growth", 
+			"Quarterly.change.in.10.year.Treasury.yield", "Stock.Market.returns", 
+			"Quarterly.change.in.BBB.bond.spread", "Quarterly.change.in.BBB.Spread.if.change.is.positive", 
+			"Home.price.growth", "Commercial.Property.Price.Growth", "Home.price.growth.if.growth.is.negative", 
+			"Commercial.Property.Price.Growth.Negative", "Annualized.Change.in.Unemployment", 
+			"Time.trend")	
 	
 	if (!all(.required_colnames_position %in% colnames(position.data))) {
 		stop("Not all required colnames were found in revenue.coeff.forecast.input")
 	}
-	if (!all(.required_colnames_model.coefficients.nco %in% colnames(model.coefficients.ppnr))) {
-		stop("Not all required colnames were found in model.coefficients.nco")
+	if (!all(.required_colnames_model.coefficients %in% colnames(model.coefficients))) {
+		stop("Not all required colnames were found in model.coefficients")
 	}
 	if (!all(.required_colnames_macro %in% colnames(macro.forecasts))) {
 		stop("Not all required colnames were found in macro.forecasts")
@@ -48,7 +53,7 @@ RevenueCoeffForecast<- function(position.data, model.coefficients.ppnr, macro.fo
 
 	#generate process position data, to use in ppnr forecasting artithmetic
 	
-.position.data.processed <- matrix(nrow=7, ncol=7)
+.position.data.processed <- matrix(NA, nrow=7, ncol=7)
 row.names(.position.data.processed) <- 
 		c("Residential.RE.Loans.Ratio", "Commercial.RE.Loans.Ratio", 
 				"CI.Loans.Ratio", "Credit.Card.Loans.Ratio", "Trading.Assets.Ratio", 
@@ -58,14 +63,29 @@ c("B.S.Ratios", "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio",
 		"Compensation.Noninterest.Expense.Ratio", "Fixed.Asset.Noninterest.Expense.Ratio", 
 		"Other.Noninterest.Expense.Ratio", "Return.on.Trading.Assets")
 
-.position.data.processed[, "B.S.Ratios"] <-
-		position.data[13:18]
+#fill in remaining columns
+.rownames <-row.names(.position.data.processed) #subset only lpart of table we need
+.colnames <- colnames(.position.data.processed) # subset only part of table we need 
+.cols<-ncol(.position.data.processed) #for efficiency in looping
+for(i in 1:.cols) {
+	if (i ==1) {
+#assign over all rows except Asset.Share
+		.position.data.processed[!(row.names(.position.data.processed) %in% c("Asset.Share")),
+				"B.S.Ratios"] <- position.data[13:18]/sum(position.data[1:5]) * 100
+
+		#take care of Asset.Share
+		.position.data.processed["Asset.Share", "B.S.Ratios"] <- position.data["Asset.Share"]	
+	}
+	else { #looping portion
+		.position.data.processed[,i] <- model.coefficients[.rownames,i] * .position.data.processed[,(i-1)]
+	}
+}
 
 #create blank capital forecast time series
 	.revenue.coeff.forecast.ts <-
 			ts(matrix(NA, ncol = 6, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
-	colnames(.revenue.coeff.forecast.ts) <-
-			c("Noninterest.Nontrading.Income.Ratio", "Compensation.Noninterest.Expense.Ratio", 
+	cols <- colnames(.revenue.coeff.forecast.ts) <-
+			c("Net.Interest.Margin","Noninterest.Nontrading.Income.Ratio", "Compensation.Noninterest.Expense.Ratio", 
 					"Fixed.Asset.Noninterest.Expense.Ratio", "Other.Noninterest.Expense.Ratio", 
 					"Return.on.Trading.Assets")	
 			
@@ -74,28 +94,72 @@ c("B.S.Ratios", "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio",
 	for(i in 1:.nrows) {
 		if (i==1) { #initial data for ppnr coefficients. Comes from arithmetic on position data
 			.revenue.coeff.forecast.ts[i,"Net.Interest.Margin"] <-
-					position.data$U.S..RE..Tot.Cl.end.1.4.Family...000./
+					position.data[7]/
 						sum(position.data[1:5])*100	
 			
-				.revenue.coeff.forecast.ts[i,"Commercial.RE.Loans.Ratio"] <-
-						position.data$Con..Total.Real.Estate.Loans...000./
-						sum(position.data[1:5])*100	
-
+				.revenue.coeff.forecast.ts[i,"Noninterest.Nontrading.Income.Ratio"] <-
+						(position.data[8] - position.data[9])/position.data[6] * 400
 								
-				.revenue.coeff.forecast.ts[i,"CI.Loans.Ratio"] <-
-						position.data$
-
-
+				.revenue.coeff.forecast.ts[i,"Compensation.Noninterest.Expense.Ratio"] <-
+						position.data[10] - position.data[6] * 400
 				
+				.revenue.coeff.forecast.ts[i, "Fixed.Asset.Noninterest.Expense.Ratio"] <-
+						position.data[11]/position.data[6] *400
+				
+				.revenue.coeff.forecast.ts[i, "Other.Noninterest.Expense.Ratio"] <-
+						(position.data[12] - (position.data[10] + position.data[11])/position.data[6])*400
+				
+				.revenue.coeff.forecast.ts[i, "Return.on.Trading.Assets"] <-
+						position.data[9]/position.data[5] * 400 
 			}
 		else { # arithmetic
 			
-			.revenue.coeff.forecast.ts[i, ] <- (model.coefficients.nco["Intercept", ] +
-					model.coefficients.nco["Lagged.dependent.variable",]
-						*.revenue.coeff.forecast.ts[(i-1), ] +
-					model.coefficients.nco["Home.price.growth", ]* macro.forecasts[i,"Home.price.growth"] + 
-					model.coefficients.nco["Home.price.growth.if.growth.is.negative",]
-						*macro.forecasts[i,"Home.price.growth.if.growth.is.negative"])  
+			.revenue.coeff.forecast.ts[i, "Net.Interest.Margin" ] <-
+					(model.coefficients["Intercept", "Net.Interest.Margin"]
+						+ model.coefficients["Lagged.dependent.variable", "Net.Interest.Margin"]
+						*.revenue.coeff.forecast.ts[(i-1), "Net.Interest.Margin"]
+						+ model.coefficients["Term.Spread", "Net.Interest.Margin"]
+						*macro.forecasts[i,"Term.Spread"]
+						+ model.coefficients["X3.Month.Treasury.Yield","Net.Interest.Margin"]
+						*macro.forecasts[i,"X3.Month.Treasury.Yield"]
+			+  model.coefficients["Time.trend", "Net.Interest.Margin"]
+			*macro.forecasts[i,"Time.trend"]
+			+ sum(.position.data.processed[, "Net.Interest.Margin"]))
+		
+.cols<-c("Noninterest.Nontrading.Income.Ratio","Compensation.Noninterest.Expense.Ratio")
+.revenue.coeff.forecast.ts[i, .cols] <- (model.coefficients["Intercept", .cols]
+			+ model.coefficients["Lagged.dependent.variable", .cols]
+			*.revenue.coeff.forecast.ts[(i-1), .cols]
+			+ model.coefficients["Stock.Market.returns", .cols]
+			*macro.forecasts[i,"Stock.Market.returns"]
+			+ c(sum(.position.data.processed[, .cols[1]]), sum(.position.data.processed[, .cols[2]])))
+			
+		.revenue.coeff.forecast.ts[i, "Fixed.Asset.Noninterest.Expense.Ratio"] <-
+					(model.coefficients["Intercept", "Fixed.Asset.Noninterest.Expense.Ratio"]
+						+ model.coefficients["Lagged.dependent.variable", "Fixed.Asset.Noninterest.Expense.Ratio"]
+						*.revenue.coeff.forecast.ts[(i-1), "Fixed.Asset.Noninterest.Expense.Ratio"]
+						+ model.coefficients["Annualized.Change.in.Unemployment", "Fixed.Asset.Noninterest.Expense.Ratio"]
+						*macro.forecasts[i,"Annualized.Change.in.Unemployment"]
+			+ sum(.position.data.processed[, "Fixed.Asset.Noninterest.Expense.Ratio"]))
+
+.revenue.coeff.forecast.ts[i, "Other.Noninterest.Expense.Ratio"] <-
+					(model.coefficients["Intercept", "Other.Noninterest.Expense.Ratio"]
+						+ model.coefficients["Lagged.dependent.variable", "Other.Noninterest.Expense.Ratio"]
+						*.revenue.coeff.forecast.ts[(i-1), "Other.Noninterest.Expense.Ratio"]
+						+ model.coefficients["Quarterly.change.in.BBB.bond.spread", "Other.Noninterest.Expense.Ratio"]
+						*macro.forecasts[i,"Quarterly.change.in.BBB.bond.spread"]
+			+ sum(.position.data.processed[, "Other.Noninterest.Expense.Ratio"]))
+
+.revenue.coeff.forecast.ts[i, "Return.on.Trading.Assets"] <-
+					(model.coefficients["Intercept", "Return.on.Trading.Assets"]
+						+ model.coefficients["Lagged.dependent.variable", "Return.on.Trading.Assets"]
+						*.revenue.coeff.forecast.ts[(i-1), "Return.on.Trading.Assets"]
+						+ model.coefficients["Quarterly.change.in.BBB.bond.spread", "Return.on.Trading.Assets"]
+						*macro.forecasts[i,"Quarterly.change.in.BBB.bond.spread"]
+						+ model.coefficients["Quarterly.change.in.BBB.Spread.if.change.is.positive",
+								"Return.on.Trading.Assets"]
+						*macro.forecasts[i,"Quarterly.change.in.BBB.Spread.if.change.is.positive"]
+						+ sum(.position.data.processed[, "Return.on.Trading.Assets"]))
 		}
 	}
 	
@@ -103,8 +167,8 @@ c("B.S.Ratios", "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio",
 }
 
 #for testing
-#load("c:/ppnr.quant.repo/class_model/data/nco_forecasts_input.RData")
-#load("c:/ppnr.quant.repo/class_model/data/model_coefficients_nco.RData")
+#load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
+#load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
 #load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 
-#RevenueCoeffForecastForecast(revenue.coeff.forecast.input, model.coefficients.nco, macro.forecasts)
+#RevenueCoeffForecast(position.data, model.coefficients, macro.forecasts)
