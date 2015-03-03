@@ -1,9 +1,9 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series nco forecast (15 columns) to 2017 Q4 for Leases, Credit Cards,
-#and other variables, from a series input files of 2014 Q3 input data for the same variables.
-#The function is fed, as default arguments, arima model coefficients, and macroeconomic forecasts
-#for 2014Q3.
+#This Function outputs a time series forecast from 2013Q3 to 2017 Q4 for PPNR revenue adjustment coefficients
+#such as Net Interest Margin, Compensation Noninterest Expense Ratio, and others
+#The function is fed, as default arguments, position data for 2014Q3, arima model coefficients, and
+#macroeconomic forecasts 
 
 
 RevenueCoeffForecast<- function(position.data, model.coefficients, macro.forecasts ) {
@@ -48,8 +48,6 @@ RevenueCoeffForecast<- function(position.data, model.coefficients, macro.forecas
 	}
 	
 	
-	#We now subset position data to use only the fields needed for ppnr. 
-	position.data <- position.data[1, .required_colnames_position]	
 
 	#generate process position data, to use in ppnr forecasting artithmetic
 	
@@ -70,14 +68,21 @@ c("B.S.Ratios", "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio",
 for(i in 1:.cols) {
 	if (i ==1) {
 #assign over all rows except Asset.Share
+.pd.subset1 <- c("U.S..RE..Total.1.4.Fmly...000.", "Con..Total.Real.Estate.Loans...000.", 
+		"Con..Tot.Comm...Ind.Loans...000.", "Con..Credit.Cards...Rel.Plans...000.", 
+		"Total.Trading.Assets...000.", "Total.Securities...000.")
+.pd.subset2<- c("Interest.Bearing.Balances...000.", "Tot.Fed.Funds...Reverse.Repos...000.", 
+		"Total.Securities...000.", "Gross.Loans...Leases...000.", "Total.Trading.Assets...000.")
+			
 		.position.data.processed[!(row.names(.position.data.processed) %in% c("Asset.Share")),
-				"B.S.Ratios"] <- position.data[13:18]/sum(position.data[1:5]) * 100
+				"B.S.Ratios"] <- position.data[1,.pd.subset1]/sum(position.data[1,.pd.subset2]) * 100
 
 		#take care of Asset.Share
-		.position.data.processed["Asset.Share", "B.S.Ratios"] <- position.data["Asset.Share"]	
+		.position.data.processed["Asset.Share", "B.S.Ratios"] <- position.data[1,"Asset.Share"]	
 	}
 	else { #looping portion
-		.position.data.processed[,i] <- model.coefficients[.rownames,i] * .position.data.processed[,(i-1)]
+		.position.data.processed[,.colnames[i]] <- (model.coefficients[.rownames,.colnames[i]]
+		*.position.data.processed[,"B.S.Ratios"])
 	}
 }
 
@@ -88,30 +93,38 @@ for(i in 1:.cols) {
 			c("Net.Interest.Margin","Noninterest.Nontrading.Income.Ratio", "Compensation.Noninterest.Expense.Ratio", 
 					"Fixed.Asset.Noninterest.Expense.Ratio", "Other.Noninterest.Expense.Ratio", 
 					"Return.on.Trading.Assets")	
-			
+	
 	#first column of our forecast is just our initial input data
+	.summing.vec <- c("Interest.Bearing.Balances...000.", "Tot.Fed.Funds...Reverse.Repos...000.", 
+			"Total.Securities...000.", "Gross.Loans...Leases...000.", "Total.Trading.Assets...000.")
 	.nrows<-nrow(.revenue.coeff.forecast.ts) #for efficiency in looping
-	for(i in 1:.nrows) {
+	for(i in 1:.nrows) { 
 		if (i==1) { #initial data for ppnr coefficients. Comes from arithmetic on position data
 			.revenue.coeff.forecast.ts[i,"Net.Interest.Margin"] <-
-					position.data[7]/
-						sum(position.data[1:5])*100	
+					position.data[1,"Net.Interest.Income...000."]/sum(position.data[1,.summing.vec])*400	
 			
-				.revenue.coeff.forecast.ts[i,"Noninterest.Nontrading.Income.Ratio"] <-
-						(position.data[8] - position.data[9])/position.data[6] * 400
-								
-				.revenue.coeff.forecast.ts[i,"Compensation.Noninterest.Expense.Ratio"] <-
-						position.data[10] - position.data[6] * 400
-				
-				.revenue.coeff.forecast.ts[i, "Fixed.Asset.Noninterest.Expense.Ratio"] <-
-						position.data[11]/position.data[6] *400
-				
-				.revenue.coeff.forecast.ts[i, "Other.Noninterest.Expense.Ratio"] <-
-						(position.data[12] - (position.data[10] + position.data[11])/position.data[6])*400
-				
-				.revenue.coeff.forecast.ts[i, "Return.on.Trading.Assets"] <-
-						position.data[9]/position.data[5] * 400 
-			}
+			.revenue.coeff.forecast.ts[i,"Noninterest.Nontrading.Income.Ratio"] <- (
+						(position.data[1,"Total.Noninterest.Income...000."] -
+						position.data[1,"NII..Trading.Revenue...000."])/position.data[1,"Total.Assets...000."] * 400
+					)
+			
+			.revenue.coeff.forecast.ts[i,"Compensation.Noninterest.Expense.Ratio"] <- (
+					position.data[1, "NIE..Salary...Benefits...000."]/position.data[1,"Total.Assets...000."] * 400
+					)
+			
+			.revenue.coeff.forecast.ts[i, "Fixed.Asset.Noninterest.Expense.Ratio"] <- (
+					position.data[1,"NIE..Premises...Fixed.Assets...000."]/position.data[1,"Total.Assets...000."] * 400
+					)
+			
+			.revenue.coeff.forecast.ts[i, "Other.Noninterest.Expense.Ratio"] <- (
+						((position.data[1,"Total.Noninterest.Expense...000."]
+						- sum(position.data[1, c("NIE..Salary...Benefits...000.", "NIE..Premises...Fixed.Assets...000.")]))
+							/position.data[1, "Total.Assets...000."]) *400)
+			
+			.revenue.coeff.forecast.ts[i, "Return.on.Trading.Assets"] <-  (
+					position.data[1,"NII..Trading.Revenue...000."]/position.data[1,"Total.Trading.Assets...000."] * 400 
+					)
+		}
 		else { # arithmetic
 			
 			.revenue.coeff.forecast.ts[i, "Net.Interest.Margin" ] <-
@@ -122,36 +135,40 @@ for(i in 1:.cols) {
 						*macro.forecasts[i,"Term.Spread"]
 						+ model.coefficients["X3.Month.Treasury.Yield","Net.Interest.Margin"]
 						*macro.forecasts[i,"X3.Month.Treasury.Yield"]
-			+  model.coefficients["Time.trend", "Net.Interest.Margin"]
-			*macro.forecasts[i,"Time.trend"]
-			+ sum(.position.data.processed[, "Net.Interest.Margin"]))
-		
-.cols<-c("Noninterest.Nontrading.Income.Ratio","Compensation.Noninterest.Expense.Ratio")
-.revenue.coeff.forecast.ts[i, .cols] <- (model.coefficients["Intercept", .cols]
-			+ model.coefficients["Lagged.dependent.variable", .cols]
-			*.revenue.coeff.forecast.ts[(i-1), .cols]
-			+ model.coefficients["Stock.Market.returns", .cols]
-			*macro.forecasts[i,"Stock.Market.returns"]
-			+ c(sum(.position.data.processed[, .cols[1]]), sum(.position.data.processed[, .cols[2]])))
+						+  model.coefficients["Time.trend", "Net.Interest.Margin"]
+						*macro.forecasts[i,"Time.trend"]
+						+ sum(.position.data.processed[, "Net.Interest.Margin"]))
 			
-		.revenue.coeff.forecast.ts[i, "Fixed.Asset.Noninterest.Expense.Ratio"] <-
-					(model.coefficients["Intercept", "Fixed.Asset.Noninterest.Expense.Ratio"]
+			.cols<-c("Noninterest.Nontrading.Income.Ratio","Compensation.Noninterest.Expense.Ratio")
+			.revenue.coeff.forecast.ts[i, .cols] <- (
+						model.coefficients["Intercept", .cols]
+						+ model.coefficients["Lagged.dependent.variable", .cols]
+						*.revenue.coeff.forecast.ts[(i-1), .cols]
+						+ model.coefficients["Stock.Market.returns", .cols]
+						*macro.forecasts[i,"Stock.Market.returns"]
+						+ c(sum(.position.data.processed[, .cols[1]]), sum(.position.data.processed[, .cols[2]]))
+						)
+			
+			.revenue.coeff.forecast.ts[i, "Fixed.Asset.Noninterest.Expense.Ratio"] <- (
+						model.coefficients["Intercept", "Fixed.Asset.Noninterest.Expense.Ratio"]
 						+ model.coefficients["Lagged.dependent.variable", "Fixed.Asset.Noninterest.Expense.Ratio"]
 						*.revenue.coeff.forecast.ts[(i-1), "Fixed.Asset.Noninterest.Expense.Ratio"]
 						+ model.coefficients["Annualized.Change.in.Unemployment", "Fixed.Asset.Noninterest.Expense.Ratio"]
 						*macro.forecasts[i,"Annualized.Change.in.Unemployment"]
-			+ sum(.position.data.processed[, "Fixed.Asset.Noninterest.Expense.Ratio"]))
-
-.revenue.coeff.forecast.ts[i, "Other.Noninterest.Expense.Ratio"] <-
-					(model.coefficients["Intercept", "Other.Noninterest.Expense.Ratio"]
+						+ sum(.position.data.processed[, "Fixed.Asset.Noninterest.Expense.Ratio"])
+						)
+			
+			.revenue.coeff.forecast.ts[i, "Other.Noninterest.Expense.Ratio"] <- (
+						model.coefficients["Intercept", "Other.Noninterest.Expense.Ratio"]
 						+ model.coefficients["Lagged.dependent.variable", "Other.Noninterest.Expense.Ratio"]
 						*.revenue.coeff.forecast.ts[(i-1), "Other.Noninterest.Expense.Ratio"]
 						+ model.coefficients["Quarterly.change.in.BBB.bond.spread", "Other.Noninterest.Expense.Ratio"]
 						*macro.forecasts[i,"Quarterly.change.in.BBB.bond.spread"]
-			+ sum(.position.data.processed[, "Other.Noninterest.Expense.Ratio"]))
-
-.revenue.coeff.forecast.ts[i, "Return.on.Trading.Assets"] <-
-					(model.coefficients["Intercept", "Return.on.Trading.Assets"]
+						+ sum(.position.data.processed[, "Other.Noninterest.Expense.Ratio"])
+						)
+			
+			.revenue.coeff.forecast.ts[i, "Return.on.Trading.Assets"] <- (
+						model.coefficients["Intercept", "Return.on.Trading.Assets"]
 						+ model.coefficients["Lagged.dependent.variable", "Return.on.Trading.Assets"]
 						*.revenue.coeff.forecast.ts[(i-1), "Return.on.Trading.Assets"]
 						+ model.coefficients["Quarterly.change.in.BBB.bond.spread", "Return.on.Trading.Assets"]
@@ -159,11 +176,12 @@ for(i in 1:.cols) {
 						+ model.coefficients["Quarterly.change.in.BBB.Spread.if.change.is.positive",
 								"Return.on.Trading.Assets"]
 						*macro.forecasts[i,"Quarterly.change.in.BBB.Spread.if.change.is.positive"]
-						+ sum(.position.data.processed[, "Return.on.Trading.Assets"]))
+						+ sum(.position.data.processed[, "Return.on.Trading.Assets"])
+						)
 		}
 	}
 	
-	return (View(.revenue.coeff.forecast.ts))
+	return (.revenue.coeff.forecast.ts)
 }
 
 #for testing
