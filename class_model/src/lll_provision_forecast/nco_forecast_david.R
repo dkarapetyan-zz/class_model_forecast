@@ -59,15 +59,12 @@ NCOForecast <- function(position.data, model.coefficients, macro.forecasts) {
 	.nrows<-nrow(.nco.forecast.ts) #for efficiency in looping
 	#now, we partition set we are looping over--4 groups of arithmetic
 	.subset1<-c("FirstLien.Residential.Real.Estate", "Junior.Lien.Residential.Real.Estate", 
-			"HELOC.Residential.Real.Estate", "Construction.Commercial.Real.Estate", 
-			"Multifamily.Commercial.Real.Estate", "NonFarm.NonResidential.CRE"
-	)
+			"HELOC.Residential.Real.Estate")
 	.subset2<-c("Credit.Card", "CI", "Leases", "Loans.to.Foreign.Governments", "Agriculture",
-			"Loans.to.Depository.Institutions", "Other"
-	)
+			"Loans.to.Depository.Institutions", "Other")
 	.subset3<-"Other.Consumer"
 	.subset4<-"Other.Real.Estate"
-
+	.subset5<-c("Construction.Commercial.Real.Estate", "Multifamily.Commercial.Real.Estate", "NonFarm.NonResidential.CRE")
 	for(i in 1:.nrows) {
 		if (i==1) { #initial data for nco assigned here
 			.nco.forecast.ts[i,"FirstLien.Residential.Real.Estate"] <- (
@@ -211,7 +208,15 @@ NCOForecast <- function(position.data, model.coefficients, macro.forecasts) {
 						+ model.coefficients["Commercial.Property.Price.Growth", .subset4]
 						*macro.forecasts[i,"Commercial.Property.Price.Growth"]
 						+ model.coefficients["Commercial.Property.Price.Growth.Negative", .subset4]
-						*macro.forecasts[i,"Home.price.growth.if.growth.is.negative"])  
+						*macro.forecasts[i,"Commercial.Property.Price.Growth.Negative"])  
+			
+			.nco.forecast.ts[i, .subset5] <- (
+						model.coefficients["Intercept", .subset5]
+						+ model.coefficients["Lagged.dependent.variable", .subset5]
+						*.nco.forecast.ts[(i-1), .subset5]
+						+ model.coefficients["Commercial.Property.Price.Growth.Negative", .subset5]
+						*macro.forecasts[i,"Commercial.Property.Price.Growth.Negative"])  
+
 		
 #TODO write test that checks if model coefficients and macro forecasts names should be identical.
 #For BAC, are not for "Commercial.Property.Price.Growth.Negative" and
@@ -220,7 +225,7 @@ NCOForecast <- function(position.data, model.coefficients, macro.forecasts) {
 		}
 	}
 	
-	return (View(.nco.forecast.ts))
+	return (.nco.forecast.ts)
 }
 
 #for testing
