@@ -4,34 +4,51 @@
 #from a time series input file of lll provision data, with an additional input
 #of total reserve data for the period of one quarter prior to the time series beginning
 
-LLLForecast <- function(individual.forecasts) {
-	.required_colnames <- c("FirstLien.Residential.Real.Estate", "Junior.Lien.Residential.Real.Estate", 
+LLLForecast <- function(position.data, model.coefficients, macro.forecasts) {
+	source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/nco_forecast_david.R")
+	source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/balance_forecast_david.R")
+
+#testing of function arguments done in called subroutines	
+	
+	#initialize model loss forecast time series, which will be used as the input to compute the
+	# lll forecast
+	
+	.model.loss.forecast.ts <-
+			ts(matrix(NA, ncol = 15, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
+	colnames(.model.loss.forecast.ts) <-
+			c("FirstLien.Residential.Real.Estate", "Junior.Lien.Residential.Real.Estate", 
 			"HELOC.Residential.Real.Estate", "Construction.Commercial.Real.Estate", 
 			"Multifamily.Commercial.Real.Estate", "NonFarm.NonResidential.CRE", 
 			"Credit.Card", "Other.Consumer", "CI", "Leases", "Other.Real.Estate", 
 			"Loans.to.Foreign.Governments", "Agriculture", "Loans.to.Depository.Institutions", 
-			"Other", "Total.Reserves...000.")
-#	
-	if (!all(.required_colnames %in% colnames(individual.forecasts))) {
-		stop("Not all required colnames were found in individual.forecasts")
-	}
+			"Other") 
 	
-	#get initial reserves from data, after which we munge slightly to get rid of pesky NA's
-	#only one entry in one quarter had relevant data, all other entries in same quarter were NA
-	.total.reserves.initial <- individual.forecasts[1, "Total.Reserves...000."] 		
-	.col.ids.to.keep <- !(colnames(individual.forecasts) %in% c("Total.Reserves...000."))
-	individual.forecasts <- individual.forecasts[-1, .col.ids.to.keep] 		
-	#create blank capital forecast time series
+	#populate model loss via nco forecast and balance forecast
+
+	.nco.forecast.ts <- NCOForecast(position.data, model.coefficients, macro.forecasts)
+	.balance.forecast.ts <- BalanceForecast(position.data)
+	.model.loss.forecast.ts[-1,] <- .nco.forecast.ts[-1,]/400 * .balance.forecast.ts[-1,]
+
+	
+	#initialize  lll forecast
 	.lll.forecast.ts <- ts(matrix(NA, ncol = 4, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
 	colnames(.lll.forecast.ts) <- 
 			c("Total.Net.Charge.offs", "X4.Qrt.Net.Charge.offs", "Total.Reserves...000.", 
 					"Provision")
+
 	
-	.lll.forecast.ts[1, "Total.Reserves...000."] <- .total.reserves.initial
-	.row<-nrow(individual.forecasts)  #efficiency in looping. 
-	for(i in 2:(.row)) {
-		#sum over all necessary elements. Subset out unnecessary
-		.lll.forecast.ts[i,"Total.Net.Charge.offs"] <- sum(individual.forecasts[i,])
+
+	.row<-nrow(.lll.forecast.ts)  #efficiency in looping. 
+	for(i in 1:(.row)) {
+		if (i==1)
+		{
+			.lll.forecast.ts[1, "Total.Reserves...000."] <- position.data[1,"Total.Reserves...000."]
+			
+		}
+		else {
+			#sum over all necessary elements. Subset out unnecessary
+			.lll.forecast.ts[i,"Total.Net.Charge.offs"] <- sum(.model.loss.forecast.ts[i,])
+		}
 	}
 	#loop. Variables below end one year before end of input data time series
 	for(i in 2:(.row-4)) {
@@ -52,9 +69,12 @@ LLLForecast <- function(individual.forecasts) {
 				else {
 					.lll.forecast.ts[(i-1), "Total.Reserves...000."] 
 				}
-		.lll.forecast.ts[i, "Provision"] <- (.lll.forecast.ts[i, "Total.Reserves...000."] + 
+		
+		.lll.forecast.ts[i, "Provision"] <- (
+					.lll.forecast.ts[i, "Total.Reserves...000."] + 
 					.lll.forecast.ts[i, "Total.Net.Charge.offs"]
-					-.lll.forecast.ts[(i-1), "Total.Reserves...000."])
+					-.lll.forecast.ts[(i-1), "Total.Reserves...000."]
+					)
 	}
 	
 	
