@@ -1,59 +1,63 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series ppnr forecast (15 columns) to 2017 Q4 for Leases, Credit Cards,
-#and other variables, from a series input files of 2014 Q3 input data for the same variables.
-#The function is fed, as default arguments, arima model coefficients, and macroeconomic forecasts
-#for 2014Q3.
+#This Function outputs a time series capital forecast (15 columns) from 2013Q3 to 2017Q4 for Net Iterest Income
+#, Trading Income, and other variables, which are used to compute a PPNR forecast
+#The function is fed position data, model coefficients, and macroeconomic forecasts starting from
+# 2014Q3. 
 
+source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/revenue_coefficients_forecast_david.R")
+source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/revenue_forecast_david.R")
+load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
+load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
+load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 
-PPNRForecast <- function(revenue.forecast, revenue.coefficients.forecast) {
-	.required_colnames_assets <- c("Interest.Earning.Assets", "Trading.Assets", "Total.Assets")		
-	
-	
-	if (!all(.required_colnames_assets %in% colnames(revenue.forecast))) {
-		stop("Not all required colnames were found in revenue.forecast")
-	}
-	
-	.required_colnames_coeffs <- c( "Net.Interest.Margin", "Noninterest.Nontrading.Income.Ratio",
-	"Compensation.Noninterest.Expense.Ratio", "Fixed.Asset.Noninterest.Expense.Ratio",
-	"Other.Noninterest.Expense.Ratio", "Return.on.Trading.Assets")
-	
-	
-	if (!all(.required_colnames_coeffs %in% colnames(revenue.coefficients.forecast))) {
-		stop("Not all required colnames were found in revenue.coefficients.forecast")
-	}
+PPNRForecast <- function(position.data, model.coefficients, macro.forecasts) {
 
-	
+#testing for inputs done in subroutines	
+	.revenue.forecast.ts <- RevenueForecast(position.data)	
+	.revenue.coeffs.forecast.ts <- RevenueCoeffForecast(position.data, model.coefficients, macro.forecasts)
 	#create blank ppnr capital forecast time series
 	.ppnr.forecast.ts <- ts(matrix(NA, ncol = 7, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
-	colnames(.ppnr.forecast.ts) <- c("Net.Interest.Income", "Non.Int.Non.Trade.Income", "Trading.Income", 
-					"Compensation.Exp", "Fixed.Asset.Exp", "Other.Exp", "PPNR")
+	colnames(.ppnr.forecast.ts) <- c("Net.Interest.Income", "Non.Int...Non.Trade.Income", "Trading.Income", 
+			"Compensation.Exp", "Fixed.Asset.Exp", "Other.Exp", "PPNR")
 
 			#first column of our forecast is just our initial input data
-	Lag(.ppnr.forecast.ts)[,"Net.Interest.Income"] <- (Lag(revenue.forecast)[,"Interest.Earning.Assets"]/400
-				*Lag(revenue.coefficients.forecast)[,"Net.Interest.Margin"]) 
+	.ppnr.forecast.ts[-1,"Net.Interest.Income"] <- (
+			.revenue.forecast.ts[-1,"Interest.Earning.Assets"]/400
+				*.revenue.coeffs.forecast.ts[-1,"Net.Interest.Margin"]
+				)
 	
-	Lag(.ppnr.forecast.ts)[,"Non.Int.Non.Trade.Income"] <-
-			(Lag(revenue.forecast)[,"Total.Assets"]/400
-				*Lag(revenue.coefficients.forecast)[,"Noninterest.Nontrading.Income.Ratio"])
+	.ppnr.forecast.ts[-1,"Non.Int...Non.Trade.Income"] <- (
+				.revenue.forecast.ts[-1,"Total.Assets"]/400
+				*.revenue.coeffs.forecast.ts[-1,"Noninterest.Nontrading.Income.Ratio"]
+				)
 	
-	Lag(.ppnr.forecast.ts)[,"Trading.Income"] <-
-			(Lag(revenue.coefficients.forecast)[,"Return.on.Trading.Assets"]/400
-				*Lag(revenue.forecast)[,"Trading.Assets"])
+	.ppnr.forecast.ts[-1,"Trading.Income"] <- (
+			.revenue.coeffs.forecast.ts[-1,"Return.on.Trading.Assets"]/400
+				*.revenue.forecast.ts[-1,"Trading.Assets"]
+				)
 	
-	Lag(.ppnr.forecast.ts)[,"Compensation.Exp"] <- (Lag(revenue.forecast)[,"Total.Assets"]/400
-				*Lag(revenue.coefficients.forecast)[,"Compensation.Noninterest.Expense.Ratio"])
+	.ppnr.forecast.ts[-1,"Compensation.Exp"] <- (
+				.revenue.forecast.ts[-1,"Total.Assets"]/400
+				*.revenue.coeffs.forecast.ts[-1,"Compensation.Noninterest.Expense.Ratio"]
+				)
 	
-	Lag(.ppnr.forecast.ts)[,"Fixed.Asset.Exp"] <-
-			(Lag(revenue.coefficients.forecast)[,"Fixed.Asset.Noninterest.Expense.Ratio"]/400
-				*Lag(revenue.forecast)[,"Total.Assets"])
+	.ppnr.forecast.ts[-1,"Fixed.Asset.Exp"] <- (
+			.revenue.coeffs.forecast.ts[-1,"Fixed.Asset.Noninterest.Expense.Ratio"]/400
+				*.revenue.forecast.ts[-1,"Total.Assets"]
+				)
 	
-	Lag(.ppnr.forecast.ts)[,"Other.Exp"] <-
-			(Lag(revenue.coefficients.forecast)[,"Other.Noninterest.Expense.Ratio"]
-				*Lag(revenue.forecast)[,"Total.Assets"])
-	
-	Lag(.ppnr.forecast.ts)[,"PPNR"] <-
-			(sum(Lag(.ppnr.forecast.ts[, 1:3])) - sum(Lag(.ppnr.forecast.ts[, 4:6])))
+	.ppnr.forecast.ts[-1,"Other.Exp"] <- (
+				.revenue.coeffs.forecast.ts[-1,"Other.Noninterest.Expense.Ratio"]/400
+				*.revenue.forecast.ts[-1,"Total.Assets"]
+				)
+
+	.cols1 <- c("Net.Interest.Income", "Non.Int...Non.Trade.Income", "Trading.Income") 
+	.cols2 <- c("Compensation.Exp", "Fixed.Asset.Exp", "Other.Exp")
+			
+	.ppnr.forecast.ts[-1,"PPNR"] <- (
+				rowSums(.ppnr.forecast.ts[-1,.cols1]) - rowSums(.ppnr.forecast.ts[-1, .cols2])
+				)
 
 	return (View(.ppnr.forecast.ts))
 }
@@ -63,4 +67,4 @@ PPNRForecast <- function(revenue.forecast, revenue.coefficients.forecast) {
 #load("c:/ppnr.quant.repo/class_model/data/model_coefficients_ppnr.RData")
 #load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 
-#PPNRForecast(revenue.forecast, model.coefficients.ppnr, macro.forecasts)
+#PPNRForecast(.revenue.forecast, model.coefficients.ppnr, macro.forecasts)
