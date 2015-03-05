@@ -3,7 +3,7 @@ library(ggplot2)
 load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
 load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
-source("c:/ppnr.quant.repo/class_model/src/capital_forecast/capital_forecast_david.R")
+source("c:/ppnr.quant.repo/class_model/src/capital_forecast/capital_forecast.R")
 
 capital.zoo <- as.zoo(CapitalForecast(position.data, model.coefficients, macro.forecasts))
 capital.fortified<-fortify(capital.zoo)

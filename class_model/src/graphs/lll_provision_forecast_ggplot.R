@@ -3,7 +3,7 @@ library(ggplot2)
 load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
 load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
-source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/lll_provision_forecast_david.R")
+source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/lll_provision_forecast.R")
 
 lll.zoo <- as.zoo(LLLForecast(position.data, model.coefficients, macro.forecasts))
 lll.fortified<-fortify(lll.zoo)
