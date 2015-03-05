@@ -10,7 +10,6 @@
 #' @returnType  
 #' @return object of class MTS
 #' @author David Karapetyan
-#' @export
 #' 
 #' 
 

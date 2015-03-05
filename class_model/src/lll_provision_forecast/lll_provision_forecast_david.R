@@ -19,7 +19,7 @@
 LLLForecast <- function(position.data, model.coefficients, macro.forecasts) {
 	source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/nco_forecast_david.R")
 	source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/balance_forecast_david.R")
-
+	
 #testing of function arguments done in called subroutines	
 	
 	#initialize model loss forecast time series, which will be used as the input to compute the
@@ -29,27 +29,27 @@ LLLForecast <- function(position.data, model.coefficients, macro.forecasts) {
 			ts(matrix(NA, ncol = 15, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
 	colnames(.model.loss.forecast.ts) <-
 			c("FirstLien.Residential.Real.Estate", "Junior.Lien.Residential.Real.Estate", 
-			"HELOC.Residential.Real.Estate", "Construction.Commercial.Real.Estate", 
-			"Multifamily.Commercial.Real.Estate", "NonFarm.NonResidential.CRE", 
-			"Credit.Card", "Other.Consumer", "CI", "Leases", "Other.Real.Estate", 
-			"Loans.to.Foreign.Governments", "Agriculture", "Loans.to.Depository.Institutions", 
-			"Other") 
+					"HELOC.Residential.Real.Estate", "Construction.Commercial.Real.Estate", 
+					"Multifamily.Commercial.Real.Estate", "NonFarm.NonResidential.CRE", 
+					"Credit.Card", "Other.Consumer", "CI", "Leases", "Other.Real.Estate", 
+					"Loans.to.Foreign.Governments", "Agriculture", "Loans.to.Depository.Institutions", 
+					"Other") 
 	
 	#populate model loss via nco forecast and balance forecast
-
+	
 	.nco.forecast.ts <- NCOForecast(position.data, model.coefficients, macro.forecasts)
 	.balance.forecast.ts <- BalanceForecast(position.data)
 	.model.loss.forecast.ts[-1,] <- .nco.forecast.ts[-1,]/400 * .balance.forecast.ts[-1,]
-
+	
 	
 	#initialize  lll forecast
 	.lll.forecast.ts <- ts(matrix(NA, ncol = 4, nrow = 14), start=c(2014,3), end=c(2017,4), frequency=4)
 	colnames(.lll.forecast.ts) <- 
 			c("Total.Net.Charge.offs", "X4.Qrt.Net.Charge.offs", "Total.Reserves...000.", 
 					"Provision")
-
 	
-
+	
+	
 	.row<-nrow(.lll.forecast.ts)  #efficiency in looping. 
 	for(i in 1:(.row)) {
 		if (i==1)
