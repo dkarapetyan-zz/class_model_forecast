@@ -5,13 +5,11 @@
 #The function is fed position data, model coefficients, and macroeconomic forecasts starting from
 # 2014Q3. 
 
-source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/revenue_coefficients_forecast_david.R")
-source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/revenue_forecast_david.R")
-load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
-load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
-load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
 
 PPNRForecast <- function(position.data, model.coefficients, macro.forecasts) {
+	
+source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/revenue_coefficients_forecast_david.R")
+source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/revenue_forecast_david.R")
 
 #testing for inputs done in subroutines	
 	.revenue.forecast.ts <- RevenueForecast(position.data)	
@@ -59,7 +57,7 @@ PPNRForecast <- function(position.data, model.coefficients, macro.forecasts) {
 				rowSums(.ppnr.forecast.ts[-1,.cols1]) - rowSums(.ppnr.forecast.ts[-1, .cols2])
 				)
 
-	return (View(.ppnr.forecast.ts))
+	return (.ppnr.forecast.ts)
 }
 
 #for testing
