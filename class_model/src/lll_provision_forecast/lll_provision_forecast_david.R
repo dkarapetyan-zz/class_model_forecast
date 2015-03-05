@@ -1,8 +1,20 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series lll provision forecast (4 columns)
-#from a time series input file of lll provision data, with an additional input
-#of total reserve data for the period of one quarter prior to the time series beginning
+#This Function outputs a time series lll provision forecast 
+#from time series input files for bank position data, macroeconomic forecasts
+#, and arima model coefficients 
+
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @param model.coefficients A matrix of arima calibration coefficients computed from past history
+#' @param macro.forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#' 
+#' 
+
 
 LLLForecast <- function(position.data, model.coefficients, macro.forecasts) {
 	source("c:/ppnr.quant.repo/class_model/src/lll_provision_forecast/nco_forecast_david.R")

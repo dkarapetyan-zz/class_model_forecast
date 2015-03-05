@@ -1,9 +1,19 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series capital forecast (15 columns) from 2013Q3 to 2017Q4 for Net Iterest Income
-#, Trading Income, and other variables, which are used to compute a PPNR forecast
-#The function is fed position data, model coefficients, and macroeconomic forecasts starting from
-# 2014Q3. 
+#This Function outputs a time series PPNR forecast from time series input files
+#for bank position data, macroeconomic forecasts , and arima model coefficients 
+
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @param model.coefficients A matrix of arima calibration coefficients computed from past history
+#' @param macro.forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#' 
+#' 
+
 
 
 PPNRForecast <- function(position.data, model.coefficients, macro.forecasts) {

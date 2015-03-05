@@ -1,7 +1,16 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series ppnr balance forecast (15 columns) to 2017 Q4 for
-#Interest Earning Assets, Trading Assets, Total Assets, from a input file of position data
+#This Function outputs a time series ppnr asset forecast from time series input files
+#for bank position data.
+
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#' 
+#' 
 
 RevenueForecast <- function(position.data) {
 	.required_colnames_position_data <- 

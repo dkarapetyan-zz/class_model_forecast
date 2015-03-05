@@ -1,7 +1,17 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series balance forecast (15 columns) to 2017 Q4 for Leases, Credit Cards,
-#and other variables, from a time series input file of 2014 Q3 input data for the same variables.
+#This Function outputs a time series balance forecast
+#from a time series input file for bank position data
+
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#' 
+#' 
+
 
 BalanceForecast <- function(position.data) {
 	.required_colnames <- c("U.S..RE..Cl.end.Frst.Lien.1.4...000.", "U.S..RE..Cl.end.Jr.Lien.1.4...000.", 

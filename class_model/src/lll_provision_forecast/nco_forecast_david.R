@@ -1,10 +1,18 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series nco forecast (15 columns) to 2017 Q4 for Leases, Credit Cards,
-#and other variables, from a series input files of 2014 Q3 input data for the same variables.
-#The function is fed, as default arguments, arima model coefficients, and macroeconomic forecasts
-#for 2014Q3.
 
+#This Function outputs a time series NCO forecast from time series input files
+#for bank position data, macroeconomic forecasts , and arima model coefficients 
+
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @param model.coefficients A matrix of arima calibration coefficients computed from past history
+#' @param macro.forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#
 
 NCOForecast <- function(position.data, model.coefficients, macro.forecasts) {
 	

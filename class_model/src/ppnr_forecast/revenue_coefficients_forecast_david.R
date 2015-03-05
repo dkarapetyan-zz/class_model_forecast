@@ -1,10 +1,18 @@
 # Author: David Karapetyan
 ###############################################################################
-#This Function outputs a time series forecast from 2013Q3 to 2017 Q4 for PPNR revenue adjustment coefficients
-#such as Net Interest Margin, Compensation Noninterest Expense Ratio, and others
-#The function is fed, as default arguments, position data for 2014Q3, arima model coefficients, and
-#macroeconomic forecasts 
+#This Function outputs a time series ppnr asset coefficient forecast from time series input files
+#for bank position data, macroeconomic forecasts , and arima model coefficients 
 
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @param model.coefficients A matrix of arima calibration coefficients computed from past history
+#' @param macro.forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#' 
+#' 
 
 RevenueCoeffForecast<- function(position.data, model.coefficients, macro.forecasts ) {
 	

@@ -1,13 +1,19 @@
 # Author: David Karapetyan
 ###############################################################################
 #This Function outputs a time series capital forecast
-#from a time series input file of PPNR, AFS and LLL
+#from time series inputs PPNR, AFS and LLL forecasts
 
 
-#For Testing
-#load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
-#load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
-#load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @param model.coefficients A matrix of arima calibration coefficients computed from past history
+#' @param macro.forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' @export
+#' 
+#' 
 
 CapitalForecast <- function(position.data, model.coefficients, macro.forecasts) {
 	source("c:/ppnr.quant.repo/class_model/src/afs_forecast/afs_forecast_david.R")
