@@ -1,10 +1,10 @@
 library(ggplot2)
 
 library("zoo")
-load("c:/ppnr.quant.repo/class_model/data/model_coefficients.RData")
-load("c:/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
-load("c:/ppnr.quant.repo/class_model/data/position_data.RData")
-source("c:/ppnr.quant.repo/class_model/src/ppnr_forecast/ppnr_forecast.R")
+load("data/model_coefficients.RData")
+load("data/macro_forecasts.RData")
+load("data/position_data.RData")
+source("src/ppnr_forecast/ppnr_forecast.R")
 
 ppnr.zoo <- as.zoo(PPNRForecast(position.data, model.coefficients, macro.forecasts))
 ppnr.fortified <- fortify(ppnr.zoo)
