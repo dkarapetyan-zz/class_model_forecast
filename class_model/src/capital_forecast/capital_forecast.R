@@ -2,16 +2,14 @@
 # from time series inputs PPNR, AFS and LLL forecasts
 
 
-#' 
-#' @param position.data  A matrix of a particular bank's present balance sheet
-#' @param model.coefficients A matrix of arima calibration coefficients computed from past history
-#' @param macro.forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
+#' @param position_data  A matrix of a particular bank's present balance sheet
+#' @param model_coefficients A matrix of arima calibration coefficients computed from past history
+#' @param macro_forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
 #' @returnType  
 #' @return object of class MTS
 #' @author David Karapetyan
 #' @export
-#' 
-#' 
+
 
 CapitalForecast <- function(position_data, model_coefficients, macro_forecasts) {
 	source("src/afs_forecast/afs_forecast.R")

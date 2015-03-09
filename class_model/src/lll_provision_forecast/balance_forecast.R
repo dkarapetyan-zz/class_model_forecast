@@ -1,13 +1,10 @@
 # Author: David Karapetyan This Function outputs a time series balance forecast
 # from a time series input file for bank position data
 
-#' 
-#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @param position_data  A matrix of a particular bank's present balance sheet
 #' @returnType  
 #' @return object of class MTS
 #' @author David Karapetyan
-#' 
-#' 
 
 
 BalanceForecast <- function(position_data) {

@@ -1,8 +1,13 @@
 library(testthat)
-source("c:\\ppnr.quant.repo\\class_model\\src\\lll_provision_forecast_david.R")
+source("src/lll_provision_forecast/lll_provision_forecast.R")
+
 # Load the class_model_input time series.
-load("data/lll_input.RData")
+load("data/position_data.RData")
+load("data/macro_forecasts.RData")
+load("data/model_coefficients.RData")
+
+
 test_that("Output is a matrix time series ", {
-    lll.output <- LLLForecast(lll.input)
-    expect_that(lll.output, is_a("mts"))
+        expect_that(LLLForecast(position_data, macro_forecasts,
+                model_coefficients) , is_a("mts"))
 }) 

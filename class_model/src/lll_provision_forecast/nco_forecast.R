@@ -3,14 +3,13 @@
 # This Function outputs a time series NCO forecast from time series input files
 # for bank position data, macroeconomic forecasts , and arima model coefficients
 
-#' 
 #' @param position_data  A matrix of a particular bank's present balance sheet
 #' @param model_coefficients A matrix of arima calibration coefficients computed from past history
 #' @param macro_forecasts A matrix of either basic, adverse, or severely adverse macroeconomic forecasts 
 #' @returnType  
 #' @return object of class MTS
 #' @author David Karapetyan
-# 
+
 
 NCOForecast <- function(position_data, model_coefficients, macro_forecasts) {
 	
