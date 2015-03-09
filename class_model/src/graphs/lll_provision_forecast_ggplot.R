@@ -6,14 +6,14 @@ load("data/macro_forecasts.RData")
 load("data/position_data.RData")
 source("src/lll_provision_forecast/lll_provision_forecast.R")
 
-lll.zoo <- as.zoo(LLLForecast(position.data, model.coefficients, macro.forecasts))
-lll.fortified <- fortify(lll.zoo)
-lll.fortified <- na.omit(lll.fortified)  #get rid of all rows with NAs
+lll_zoo <- as.zoo(LLLForecast(position_data, model_coefficients, macro_forecasts))
+lll_fortified <- fortify(lll_zoo)
+lll_fortified <- na.omit(lll_fortified)  #get rid of all rows with NAs
 
-p <- ggplot(data = lll.fortified, aes(x = lll.fortified$Index, y = lll.fortified$Provision))
+p <- ggplot(data = lll_fortified, aes(x = lll_fortified$Index, y = lll_fortified$Provision))
 p <- p + labs(title = "LLL Provision Forecast")
 p <- p + labs(x = "Time")
 p <- p + labs(y = "Provision")
-p <- p + geom_path(data = lll.fortified, aes(x = lll.fortified$Index, y = lll.fortified$Provision))
+p <- p + geom_path(data = lll_fortified, aes(x = lll_fortified$Index, y = lll_fortified$Provision))
 
 print(p) 

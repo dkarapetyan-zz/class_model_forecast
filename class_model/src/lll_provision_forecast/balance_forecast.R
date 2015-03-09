@@ -1,0 +1,76 @@
+# Author: David Karapetyan This Function outputs a time series balance forecast
+# from a time series input file for bank position data
+
+#' 
+#' @param position.data  A matrix of a particular bank's present balance sheet
+#' @returnType  
+#' @return object of class MTS
+#' @author David Karapetyan
+#' 
+#' 
+
+
+BalanceForecast <- function(position_data) {
+	
+    .required_colnames <- c("U.S..RE..Cl.end.Frst.Lien.1.4...000.",
+    "U.S..RE..Cl.end.Jr.Lien.1.4...000.",
+    "U.S..RE..Rev.1.4.Fam..HE.Lines....000.",
+    "U.S..RE..Constr...Land.Dev...000.", "U.S..RE..Multifamily.Loans...000.",
+    "U.S..RE..Comm.RE.Nonfarm.NonRes....000.",
+    "Con..Tot.Comm...Ind.Loans...000.", "Con..Credit.Cards...Rel.Plans...000.",
+    "Con..Tot.Consumer.Loans...000.", "Con..Total.Leases...000.",
+    "Con..Total.Real.Estate.Loans...000.",
+    "Con..Loans.to.Depository.Institutions...000.",
+    "Con..Agricultural.Prod.Loans...000.",
+    "Con..non.U.S..Government.Loans...000.", "Other.Loans...000.")
+    # 
+    if (!all(.required_colnames %in% colnames(position_data))) {
+        stop("Not all required colnames were found in position.data")
+    }
+    
+    # create blank capital forecast time series
+    .balance_forecast_ts <- ts(matrix(NA, ncol = 15, nrow = 14), start = c(2014, 
+        3), end = c(2017, 4), frequency = 4)
+    colnames(.balance_forecast_ts) <- c("FirstLien.Residential.Real.Estate",
+    "Junior.Lien.Residential.Real.Estate", "HELOC.Residential.Real.Estate",
+    "Construction.Commercial.Real.Estate", "Multifamily.Commercial.Real.Estate",
+    "NonFarm.NonResidential.CRE", "Credit.Card", "Other.Consumer", "CI",
+    "Leases", "Other.Real.Estate", "Loans.to.Foreign.Governments",
+    "Agriculture", "Loans.to.Depository.Institutions", "Other")
+
+    # first column of our forecast is just our initial input data
+    .subset1 <- c("U.S..RE..Cl.end.Frst.Lien.1.4...000.",
+    "U.S..RE..Cl.end.Jr.Lien.1.4...000.",
+    "U.S..RE..Rev.1.4.Fam..HE.Lines....000.",
+    "U.S..RE..Constr...Land.Dev...000.", "U.S..RE..Multifamily.Loans...000.",
+    "U.S..RE..Comm.RE.Nonfarm.NonRes....000.")
+
+    .nrows <- nrow(.balance_forecast_ts)  #for efficiency in looping
+	
+    for (i in 1:.nrows) {
+        if (i == 1) {
+            .balance_forecast_ts[1, colnames(.balance_forecast_ts)[1:6]] <- position_data[1, 
+                .subset1]
+            .balance_forecast_ts[1, "Credit.Card"] <- position_data[1, "Con..Credit.Cards...Rel.Plans...000."]
+            .balance_forecast_ts[1, "Other.Consumer"] <- (position_data[1, "Con..Tot.Consumer.Loans...000."] - 
+                position_data[1, "Con..Credit.Cards...Rel.Plans...000."])
+            .balance_forecast_ts[1, "CI"] <- position_data[1, "Con..Tot.Comm...Ind.Loans...000."]
+            .balance_forecast_ts[1, "Leases"] <- position_data[1, "Con..Total.Leases...000."]
+            .balance_forecast_ts[1, "Other.Real.Estate"] <- (position_data[1,
+            "Con..Total.Real.Estate.Loans...000."] - sum(position_data[1, .subset1]))
+            
+            .balance_forecast_ts[1, "Loans.to.Foreign.Governments"] <- (position_data[1, 
+                "Con..non.U.S..Government.Loans...000."])
+            .balance_forecast_ts[1, "Agriculture"] <- position_data[1, "Con..Agricultural.Prod.Loans...000."]
+            
+            .balance_forecast_ts[1, "Loans.to.Depository.Institutions"] <- position_data[1, 
+                "Con..Loans.to.Depository.Institutions...000."]
+            
+            .balance_forecast_ts[1, "Other"] <- position_data[1, "Other.Loans...000."]
+        } else {
+            .balance_forecast_ts[i, ] <- 1.0125 * .balance_forecast_ts[i - 1, ]
+        }
+    }
+    
+    return(.balance_forecast_ts)
+} 
