@@ -11,7 +11,7 @@
 #' @export
 
 
-PPNRForecast <- function(position_data, model_coefficients, macro_forecasts) {
+PpnrForecast <- function(position_data, model_coefficients, macro_forecasts) {
   
   source("src/ppnr_forecast/asset_coefficients_forecast.R")
   source("src/ppnr_forecast/asset_forecast.R")

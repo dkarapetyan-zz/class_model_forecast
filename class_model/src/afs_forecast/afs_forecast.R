@@ -12,7 +12,7 @@
 #' @export
 
 
-AFSForecast <- function(position_data, model_coefficients, macro_forecasts) {
+AfsForecast <- function(position_data, model_coefficients, macro_forecasts) {
   
   .required_colnames_position <- c("Gain.Realized.Gns.AFS.Secs...000.",
       "Total.Securities.AFS.BV...000.", "Total.AFS.Securities.FV...000.",

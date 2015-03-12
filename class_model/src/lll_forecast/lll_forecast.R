@@ -12,7 +12,7 @@
 
 
 
-LLLForecast <- function(position_data, model_coefficients, macro_forecasts) {
+LllForecast <- function(position_data, model_coefficients, macro_forecasts) {
   source("src/lll_forecast/nco_forecast.R")
   source("src/lll_forecast/balance_forecast.R")
   
