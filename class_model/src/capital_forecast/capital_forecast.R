@@ -12,85 +12,95 @@
 
 
 CapitalForecast <- function(position_data, model_coefficients, macro_forecasts) {
-	source("src/afs_forecast/afs_forecast.R")
-	source("src/ppnr_forecast/ppnr_forecast.R")
-	source("src/lll_provision_forecast/lll_provision_forecast.R")
-	
-	
-	# testing of inputs done in subroutines called by function
-	
-	
-	# create blank capital forecast time series
-	.capital_forecast_ts <- ts(matrix(NA, ncol = 8, nrow = 14), start = c(2014, 3), 
-			end = c(2017, 4), frequency = 4)
-	colnames(.capital_forecast_ts) <- c("Net.Income.Before.Tax", "Allowed.DTA", "Taxes", 
-			"Net.Income", "Dividends", "Capital", "Tier.1.Common.Capital", "Leverage.Ratio")
-	
-	
-	# Fill out row entries of capital forecast using arithmetic operations on ppnr,
-	# lll, and afs
-	
-	.row <- nrow(.capital_forecast_ts)  #efficiency in looping. 
-	for (i in 1:.row) {
-		if (i == 1) {
-			if (is.na(position_data[1, "Net.Deferred.Tax.Asset...000."] - position_data[1, 
-							"Disallowed.Deferred.Taxes...000."])) {
-				.capital_forecast_ts[1, "Allowed.DTA"] <- position_data[1, "Net.Deferred.Tax.Asset...000."]
-			} else {
-				.capital_forecast_ts[1, "Allowed.DTA"] <- (position_data[1, "Net.Deferred.Tax.Asset...000."]
-							- position_data[1, "Disallowed.Deferred.Taxes...000."])
-			}
-			
-			.capital_forecast_ts[1, "Dividends"] <- sum(position_data[1,
-							c("Less.Purchase.of.Treasury.Stck...000.",
-									"Dividends.on.Preferred.Stock...000.",
-									"Dividends.on.Common.Stock...000.")])
-			
-			.capital_forecast_ts[1, "Capital"] <- position_data[1, "GRB..Total.Equity.Capital...000."]
-			
-			.capital_forecast_ts[1, "Tier.1.Common.Capital"] <- position_data[1,
-					"B3.GRB..Tier.1.Common.Capital..CET1....000."]
-			
-			.capital_forecast_ts[1, "Leverage.Ratio"] <- (position_data[1,
-								"B3.GRB..Tier.1.Common.Capital..CET1....000."]/position_data[1,
-								"Total.Assets...000."])
-			
-		} else {
-			.capital_forecast_ts[i, "Net.Income.Before.Tax"] <- (PPNRForecast(position_data, 
-								model_coefficients, macro_forecasts)[i, "PPNR"]
-						- LLLForecast(position_data, model_coefficients, macro_forecasts)[i, "Provision"]
-						+ AFSForecast(position_data, model_coefficients, macro_forecasts)[i,
-								"Gain.AFS.Securities"])
-			
-			.capital_forecast_ts[i, "Taxes"] <- max(0.35 * .capital_forecast_ts[i, 
-							"Net.Income.Before.Tax"], max(0.1 * .capital_forecast_ts[i - 1,
-											"Tier.1.Common.Capital"]
-									- .capital_forecast_ts[i - 1, "Allowed.DTA"], 0))
-			
-			.capital_forecast_ts[i, "Allowed.DTA"] <- (min(.capital_forecast_ts[i, 
-										"Taxes"], 0) + .capital_forecast_ts[i - 1, "Allowed.DTA"])
-			
-			.capital_forecast_ts[i, "Net.Income"] <- (.capital_forecast_ts[i, "Net.Income.Before.Tax"] - 
-						.capital_forecast_ts[i, "Taxes"])
-			
-			.capital_forecast_ts[i, "Dividends"] <- (max(0.9 * .capital_forecast_ts[i -
-			1, "Dividends"] + (0.1) * (0.45 * .capital_forecast_ts[i, "Net.Income"] -
-			.capital_forecast_ts[i - 1 , "Dividends"]), 0))
-			
-			.capital_forecast_ts[i, "Capital"] <- (.capital_forecast_ts[i - 1, "Capital"]
-						+ .capital_forecast_ts[i, "Net.Income"]
-						+ .capital_forecast_ts[i, "Dividends"])
-			
-			.capital_forecast_ts[i, "Tier.1.Common.Capital"] <- (.capital_forecast_ts[i, 
-								"Capital"]
-						- .capital_forecast_ts[1, "Capital"]
-						+ .capital_forecast_ts[1, 
-								"Tier.1.Common.Capital"])
-			
-			.capital_forecast_ts[i, "Leverage.Ratio"] <- (.capital_forecast_ts[i, 
-								"Tier.1.Common.Capital"]/(position_data[1, "Total.Assets...000."]
-							* (1 + (0.0125 * (i - 1)))))
-		}
-	}
-	return(.capital_forecast_ts)
+  source("src/afs_forecast/afs_forecast.R")
+  source("src/ppnr_forecast/ppnr_forecast.R")
+  source("src/lll_provision_forecast/lll_provision_forecast.R")
+  
+  
+  # testing of inputs done in subroutines called by function
+  
+  
+  # create blank capital forecast time series
+  cols <- c("Net.Income.Before.Tax", "Allowed.DTA", "Taxes", 
+      "Net.Income", "Dividends", "Capital", "Tier.1.Common.Capital", "Leverage.Ratio")
+  
+  .capital_forecast_df <- data.frame(ts(matrix(NA, ncol = length(cols)),
+          start = start(macro_forecasts),
+          end = end(macro_forecasts),
+          frequency = frequency(macro_forecasts)))
+  
+  colnames(.capital_forecast_df) <- cols 
+  
+  
+  # Fill out row entries of capital forecast using arithmetic operations on ppnr,
+  # lll, and afs
+  ppnr <- data.frame(PPNRForecast(position_data, model_coefficients, macro_forecasts))
+  lll <- data.frame(LLLForecast(position_data, model_coefficients, macro_forecasts))
+  afs <- data.frame(AFSForecast(position_data, model_coefficients, macro_forecasts))
+  .row <- nrow(.capital_forecast_df)  #efficiency in looping. 
+  for (i in 1:.row) {
+    if (i == 1) {
+      if (is.na(position_data$Net.Deferred.Tax.Asset...000.
+              - position_data$Disallowed.Deferred.Taxes...000.)) {
+        .capital_forecast_df$Allowed.DTA[i] <- position_data$Net.Deferred.Tax.Asset...000.
+      } else {
+        .capital_forecast_df$Allowed.DTA[i] <- (
+              position_data$Net.Deferred.Tax.Asset...000.
+              - position_data$Disallowed.Deferred.Taxes...000.)
+      }
+      
+      .capital_forecast_df$Dividends[i] <- 
+          sum(position_data[c("Less.Purchase.of.Treasury.Stck...000.",
+                      "Dividends.on.Preferred.Stock...000.",
+                      "Dividends.on.Common.Stock...000.")])
+      
+      .capital_forecast_df$Capital[i] <- position_data$GRB..Total.Equity.Capital...000.
+      
+      .capital_forecast_df$Tier.1.Common.Capital[i] <-
+          position_data$B3.GRB..Tier.1.Common.Capital..CET1....000.
+      
+      .capital_forecast_df$Leverage.Ratio[i] <- (
+            position_data$B3.GRB..Tier.1.Common.Capital..CET1....000.
+            / position_data$Total.Assets...000.)
+      
+    } else {
+      .capital_forecast_df$Net.Income.Before.Tax[i] <- (
+            ppnr$PPNR[i] - lll$Provision[i] + afs$Gain.AFS.Securities[i])
+      
+      .capital_forecast_df$Taxes[i] <- max(
+          0.35 * .capital_forecast_df$Net.Income.Before.Tax[i],
+          max(0.1 * .capital_forecast_df$Tier.1.Common.Capital[i-1]
+                  - .capital_forecast_df$Allowed.DTA[i-1], 0))
+      
+      .capital_forecast_df$Allowed.DTA[i] <- (
+            min(.capital_forecast_df$Taxes[i], 0) + .capital_forecast_df$Allowed.DTA[i-1])
+      
+      .capital_forecast_df$Net.Income[i] <- (
+            .capital_forecast_df$Net.Income.Before.Tax[i] - .capital_forecast_df$Taxes[i])
+      
+      .capital_forecast_df$Dividends[i] <- (
+            max(0.9 * .capital_forecast_df$Dividends[i-1] 
+                    + (0.1) * (0.45 * .capital_forecast_df$Net.Income[i] 
+                      - .capital_forecast_df$Dividends[i-1]), 0))
+      
+      .capital_forecast_df$Capital[i] <- (
+            .capital_forecast_df$Capital[i-1]
+            + .capital_forecast_df$Net.Income[i]
+            + .capital_forecast_df$Dividends[i])
+      
+      .capital_forecast_df$Tier.1.Common.Capital[i] <- (
+            .capital_forecast_df$Capital[i]
+            - .capital_forecast_df$Capital[1]
+            + .capital_forecast_df$Tier.1.Common.Capital[1])
+      
+      .capital_forecast_df$Leverage.Ratio[i] <- (
+            .capital_forecast_df$Tier.1.Common.Capital[i]
+            / (position_data$Total.Assets...000. * (1 + (0.0125 * (i - 1)))))
+    }
+  }
+  return(ts(
+          .capital_forecast_df, 
+          start = start(macro_forecasts),
+          end = end(macro_forecasts),
+          frequency = frequency(macro_forecasts)))
 } 
