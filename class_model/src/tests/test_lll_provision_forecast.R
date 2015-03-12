@@ -8,6 +8,6 @@ load("data/model_coefficients.RData")
 
 
 test_that("Output is a matrix time series ", {
-        expect_that(LLLForecast(position_data, macro_forecasts,
-                model_coefficients) , is_a("mts"))
+  expect_that(LLLForecast(position_data, macro_forecasts, model_coefficients), 
+    is_a("mts"))
 }) 
