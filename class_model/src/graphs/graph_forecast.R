@@ -11,34 +11,34 @@
 #' @export
 
 GraphForecast <- function(position_data, model_coefficients, macro_forecasts, book, variable) {
-  if (!(book %in% c("afs", "ppnr", "lll", "capital")))
-  {stop("Error: Please input a book value of either afs, ppnr, lll, or capital")
-  }
+	if (!(book %in% c("afs", "ppnr", "lll", "capital")))
+	{stop("Error: Please input a book value of either afs, ppnr, lll, or capital")
+	}
 # if (!(variable %in% colnames(book))) {
 #   {stop(paste("Error: Please input a variable name of one of the following:", colnames(book) ))}
 #   }
-  
-  library(ggplot2)
-  library("zoo")
-  library("Hmisc")
-  load("data/model_coefficients.RData")
-  load("data/macro_forecasts.RData")
-  load("data/position_data.RData")
-  source(paste("src/", as.name(book), "_forecast/", as.name(book), "_forecast.R", sep=""))
-  function_to_call <- as.name(paste(as.name(capitalize((book))), "Forecast", sep=""))
-  book_zoo <- as.zoo(eval(function_to_call)(position_data, model_coefficients, macro_forecasts))
-  book_fortified <- fortify(book_zoo)
-  
-  book_fortified <- na.omit(book_fortified)  #get rid of all rows with NAs, so ggplot doesn't give warning
-  
-  .environment <- environment() #otherwise, aes doesn't source environment properly
-  p <- ggplot(data = book_fortified,
-      aes(book_fortified$Index,
-          book_fortified[[variable]]),
-      environment = .environment) #error with $ sign instead of [[ ]]
-  p <- p + ggtitle(paste(capitalize(book), "Forecast"))
-  p <- p + xlab("Time")
-  p <- p + ylab(variable)
-  p <- p + geom_line()
-  print(p)
+	
+	library(ggplot2)
+	library("zoo")
+	library("Hmisc")
+	load("data/model_coefficients.RData")
+	load("data/macro_forecasts.RData")
+	load("data/position_data.RData")
+	source(paste("src/", as.name(book), "_forecast/", as.name(book), "_forecast.R", sep=""))
+	function_to_call <- as.name(paste(as.name(capitalize((book))), "Forecast", sep=""))
+	book_zoo <- as.zoo(eval(function_to_call)(position_data, model_coefficients, macro_forecasts))
+	book_fortified <- fortify(book_zoo)
+	
+	book_fortified <- na.omit(book_fortified)  #get rid of all rows with NAs, so ggplot doesn't give warning
+	
+	.environment <- environment() #otherwise, aes doesn't source environment properly
+	p <- ggplot(data = book_fortified,
+			aes(book_fortified$Index,
+					book_fortified[[variable]]),
+			environment = .environment) #error with $ sign instead of [[ ]]
+	p <- p + ggtitle(paste(capitalize(book), "Forecast"))
+	p <- p + xlab("Time")
+	p <- p + ylab(variable)
+	p <- p + geom_line()
+	print(p)
 }
