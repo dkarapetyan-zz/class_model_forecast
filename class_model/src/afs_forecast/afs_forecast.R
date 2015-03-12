@@ -122,6 +122,8 @@ AFSForecast <- function(position_data, model_coefficients, macro_forecasts) {
             .afs_forecast_df$Total.AFS.Securities[i])
     }
   }
+  #get rid of Risk.AFS.Ratios column--just position processed data
+.afs_forecast_df <- .afs_forecast_df[-1]
   return(ts(
           .afs_forecast_df,
           start = start(macro_forecasts),
