@@ -19,7 +19,7 @@
 
 LossForecast <- function(position_data, model_coefficients, macro_forecasts) {
 source("src/lll_forecast/balance_forecast.R")  
-source("src/lll_forecast/balance_forecast.R")  
+source("src/lll_forecast/nco_forecast.R")  
   # initialize model loss forecast time series, which will be
   # used as the input to compute the lll forecast
   cols <- c(
@@ -41,7 +41,7 @@ source("src/lll_forecast/balance_forecast.R")
   # populate model loss via nco forecast and balance forecast
   # convert time series to data frame, as data frame easier to
   # work with due to $
-  .nco_forecast_df <- data.frame(NcoForecast(position_data, 
+  .nco_forecast_df <- data.frame(NCOForecast(position_data, 
           model_coefficients, macro_forecasts))
   
   .balance_forecast_df <- data.frame(BalanceForecast(position_data, 

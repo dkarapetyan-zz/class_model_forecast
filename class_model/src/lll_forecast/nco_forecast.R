@@ -19,7 +19,7 @@
 #' model_coefficients = object_data_frame,
 #' macro_forecasts = object_time_series)
 
-NcoForecast <- function(position_data, model_coefficients, macro_forecasts) {
+NCOForecast <- function(position_data, model_coefficients, macro_forecasts) {
   
   .required_colnames_position <- c("Interest.Bearing.Balances...000.", 
     "Tot.Fed.Funds...Reverse.Repos...000.", "Total.Securities...000.", 

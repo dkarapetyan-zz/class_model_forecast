@@ -18,7 +18,7 @@
 #' macro_forecasts = object_time_series)
 
 
-PpnrForecast <- function(position_data, model_coefficients, macro_forecasts) {
+PPNRForecast <- function(position_data, model_coefficients, macro_forecasts) {
   
   source("src/ppnr_forecast/asset_coefficients_forecast.R")
   source("src/ppnr_forecast/asset_forecast.R")
