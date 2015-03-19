@@ -14,30 +14,43 @@
 #' @author David Karapetyan
 #' @export
 #' @examples
-#' library(ggplot2)
-#' library("zoo")
-#' library("Hmisc")
-#' setwd("c:/ppnr.quant.repo/class_model/")
-#' load("data/model_coefficients.RData")
-#' load("data/macro_forecasts.RData")
-#' load("data/position_data.RData")
-#' source(file = "src/lll_forecast/nco_forecast.R")
-#' source(file = "src/lll_forecast/balance_forecast.R")
-#' source(file = "src/capital_forecast/capital_forecast.R")
-#' source(file = "src/lll_forecast/loss_forecast.R")
-#' source(file = "src/afs_forecast/afs_forecast.R")
-#' source(file = "src/lll_forecast/lll_forecast.R")
+library(ggplot2)
+library("zoo")
+library("Hmisc")
+setwd("c:/ppnr.quant.repo/class_model/")
+load("data/model_coefficients_ey.RData")
+load("data/model_coefficients_frb.RData")
+load("data/macro_forecasts.RData")
+load("data/nco_data.RData")
+load("data/ppnr_data.RData")
+load("data/total_assets.RData")
+load("data/capital_data.RData")
+
+source(file = "src/lll_forecast/nco_forecast.R")
+source(file = "src/lll_forecast/balance_forecast.R")
+source(file = "src/capital_forecast/capital_forecast.R")
+source(file = "src/lll_forecast/loss_forecast.R")
+source(file = "src/afs_forecast/afs_forecast.R")
+source(file = "src/lll_forecast/lll_forecast.R")
+source(file = "src/prepare_position_data.R")
+
 #' 
-#' GraphForecast(
-#' book = "lll", 
-#' variable = "Total Reserves ($000)",
-#' position_data = position_data,
-#' macro_forecasts = macro_forecasts)
-#' model_coefficients = model_coefficients)
+GraphForecast(
+book = "capital", 
+variable = "Net Income",
+bank = "Bank of America Corporation",
+quarter = "2014 Q3",
+nco_data = nco_data,
+ppnr_data = ppnr_data,
+total_assets = total_assets,
+capital_data = capital_data,
+model_coefficients = model_coefficients_ey,
+macro_forecasts = macro_forecasts)
 
 
-GraphForecast <- function(book, variable,
-    position_data, model_coefficients, macro_forecasts) {
+GraphForecast <- function(
+    book, variable, bank, quarter, nco_data, ppnr_data,
+    total_assets, capital_data, model_coefficients, macro_forecasts) {
   
 #  book <- tolower(book) #make case of input irrelevant 
   
@@ -135,6 +148,8 @@ GraphForecast <- function(book, variable,
 #  }
   
   .book <- .book_list[[book]]
+  position_data <- prepare_position_data(
+      bank, quarter, nco_data, ppnr_data , total_assets, capital_data)
   book_zoo <- as.zoo(eval(as.name(.book[["func"]]))(
           position_data,
           model_coefficients,
