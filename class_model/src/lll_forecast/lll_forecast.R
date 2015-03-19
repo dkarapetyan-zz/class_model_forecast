@@ -55,7 +55,14 @@ LLLForecast <- function(position_data, model_coefficients, macro_forecasts) {
       .lll_forecast_df$X4.Qrt.Net.Charge.offs[i] <-
           sum(.lll_forecast_df[(i + 1):(i + 4), "Total.Net.Charge.offs"])
       
-      .lll_forecast_df$Total.Reserves...000.[i] <-          if ((.lll_forecast_df$Total.Reserves...000.[i - 1] -
+      .lll_forecast_df$Total.Reserves...000.[i] <-
+          if (is.na(
+                  .lll_forecast_df$Total.Reserves...000.[i - 1] -
+                      .lll_forecast_df$Total.Net.Charge.offs[i] <
+              .lll_forecast_df$X4.Qrt.Net.Charge.offs[i]))
+          {
+            .lll_forecast_df$Total.Reserves...000.[i - 1] 
+          }          else if ((.lll_forecast_df$Total.Reserves...000.[i - 1] -
                 .lll_forecast_df$Total.Net.Charge.offs[i]) <
               .lll_forecast_df$X4.Qrt.Net.Charge.offs[i]) {
             .lll_forecast_df$X4.Qrt.Net.Charge.offs[i]
