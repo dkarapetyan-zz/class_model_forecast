@@ -36,8 +36,8 @@ source(file = "src/prepare_position_data.R")
 
 #' 
 GraphForecast(
-book = "loss", 
-variable = "CI",
+book = "capital", 
+variable = "Net Income",
 bank = "Adbanc, Inc.",
 quarter = "2014Q3",
 nco_data = nco_data,
@@ -155,7 +155,9 @@ book <- tolower(book)
   .book <- .book_list[[book]]
   position_data <- prepare_position_data(
       bank, quarter, nco_data, ppnr_data , total_assets, capital_data)
-  book_zoo <- as.zoo(eval(as.name(.book[["func"]]))(
+  
+  .func <- as.name(.book[["func"]])
+  book_zoo <- as.zoo(eval(.func)(
           position_data,
           model_coefficients,
           macro_forecasts))
