@@ -50,7 +50,17 @@ source("src/lll_forecast/nco_forecast.R")
   # first quarter of model loss is empty
   .model_loss_forecast_df[-1, ] <- (
         .nco_forecast_df[-1, ]/400 * .balance_forecast_df[-1, ])
+
+  #convert NA and NaN to 0. 
+    .model_loss_forecast_df <- replace(
+        .model_loss_forecast_df, sapply(.model_loss_forecast_df,
+        is.na), 0)
+  
+     .model_loss_forecast_df <- replace(
+        .model_loss_forecast_df, sapply(.model_loss_forecast_df,
+        is.nan), 0)
  
+  
   return(ts(
           .model_loss_forecast_df,
           start = start(macro_forecasts), 

@@ -230,6 +230,14 @@ NCOForecast <- function(position_data, model_coefficients, macro_forecasts) {
       
     }
   }
+    #convert NA and NaN to 0. 
+    .nco_forecast_df <- replace(.nco_forecast_df, sapply(.nco_forecast_df,
+        is.na), 0)
+
+    .nco_forecast_df <- replace(.nco_forecast_df, sapply(.nco_forecast_df,
+        is.nan), 0)
+
+
   return(ts(.nco_forecast_df,
           start = start(macro_forecasts), 
           end = end(macro_forecasts),

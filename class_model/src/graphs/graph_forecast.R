@@ -36,10 +36,10 @@ source(file = "src/prepare_position_data.R")
 
 #' 
 GraphForecast(
-book = "capital", 
-variable = "Net Income",
-bank = "Bank of America Corporation",
-quarter = "2014 Q3",
+book = "loss", 
+variable = "CI",
+bank = "Adbanc, Inc.",
+quarter = "2014Q3",
 nco_data = nco_data,
 ppnr_data = ppnr_data,
 total_assets = total_assets,
@@ -147,6 +147,11 @@ GraphForecast <- function(
 #					as.name(book), "_forecast.R", sep=""))
 #  }
   
+#safeguard against user error inputting book name
+book <- tolower(book) 
+
+#retrieve appropriate forecasting function, and prepare to graph
+
   .book <- .book_list[[book]]
   position_data <- prepare_position_data(
       bank, quarter, nco_data, ppnr_data , total_assets, capital_data)

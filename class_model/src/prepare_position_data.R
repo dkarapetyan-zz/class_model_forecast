@@ -64,6 +64,7 @@ prepare_position_data <- function(bank, quarter, nco_data, ppnr_data,
   }
   
   
+
   
   # Subset the ppnr data.
   .ppnr_bank_info <- ppnr_data[
@@ -85,23 +86,38 @@ prepare_position_data <- function(bank, quarter, nco_data, ppnr_data,
   
   
   
-  #prepare for merge. Drop Bank and Period
+  #prepare for merge. Drop Bank and Period.
+#NCO and PPNR data have 3 variables in common.
+#Drop redundancies before merge
+
   .ppnr_bank_info <- .ppnr_bank_info[,
-      !(names(.ppnr_bank_info) %in% c("Bank", "Period"))]
+      !(names(.ppnr_bank_info) %in% c(
+                "Bank", 
+                "Period",
+                "Con..Total.Real.Estate.Loans...000.", 
+                "Con..Tot.Comm...Ind.Loans...000.",    
+                "Con..Credit.Cards...Rel.Plans...000."
+            ))]
   .nco_bank_info <- .nco_bank_info[,
       !(names(.nco_bank_info) %in% c("Bank", "Period"))]
   .capital_bank_info <- .capital_bank_info[,
       !(names(.capital_bank_info) %in% c("Bank", "Period"))]
-  
+
+  #merge
   .final_data <- merge(.nco_bank_info, .ppnr_bank_info,
       by = "SNL.Institution.Key")
   .final_data <- merge(.final_data, .capital_bank_info,
       by = "SNL.Institution.Key")
   .final_data$SNL.Institution.Key <- NULL
   
+  #compute Asset Share and add to .final_data
   .final_data$Asset.Share <- (100 * .final_data$Total.Assets...000. /
         total_assets[total_assets$Period == quarter, "Total.Assets"])
   
+    # replace NA's in position data with 0's
+#  .final_data <- replace(.final_data, is.na(.final_data), 0)
+
+
   return(.final_data)
 }
 

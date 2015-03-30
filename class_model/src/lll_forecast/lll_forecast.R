@@ -76,8 +76,14 @@ LLLForecast <- function(position_data, model_coefficients, macro_forecasts) {
           (.lll_forecast_df$Total.Reserves...000.[i] +
             .lll_forecast_df$Total.Net.Charge.offs[i] -
             .lll_forecast_df$Total.Reserves...000.[i - 1])    }  }
-  
-  
+
+    #convert NA and NaN to 0. 
+    .lll_forecast_df <- replace(.lll_forecast_df, sapply(.lll_forecast_df,
+        is.na), 0)
+
+     .lll_forecast_df <- replace(.lll_forecast_df, sapply(.lll_forecast_df,
+        is.nan), 0)
+ 
   return(ts(
           .lll_forecast_df, 
           start = start(macro_forecasts), 

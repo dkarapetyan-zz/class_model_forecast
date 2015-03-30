@@ -56,6 +56,16 @@ RevenueForecast <- function(position_data, macro_forecasts) {
       
     }
   }
+  
+    #convert NA and NaN to 0. 
+    .revenue_forecast_df <- replace(
+        .revenue_forecast_df, sapply(.revenue_forecast_df,
+        is.na),  0)
+
+    .revenue_forecast_df <- replace(
+        .revenue_forecast_df, sapply(.revenue_forecast_df,
+        is.nan),  0)
+
   return(ts(
           .revenue_forecast_df,
           start = start(macro_forecasts), 

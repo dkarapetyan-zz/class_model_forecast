@@ -90,6 +90,17 @@ BalanceForecast <- function(position_data, macro_forecasts) {
       .balance_forecast_df[i, ] <- 1.0125 * .balance_forecast_df[i - 1, ]
     }
   }
+ 
+    #convert NA and NaN to 0. 
+    .balance_forecast_df <- replace(
+        .balance_forecast_df, sapply(.balance_forecast_df,
+        is.na), 0)
+
+    .balance_forecast_df <- replace(
+        .balance_forecast_df, sapply(.balance_forecast_df,
+        is.nan), 0)
+
+  
   return(ts(.balance_forecast_df, start = start(macro_forecasts), 
           end = end(macro_forecasts), frequency = frequency(macro_forecasts)))
 } 

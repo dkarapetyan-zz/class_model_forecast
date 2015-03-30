@@ -117,6 +117,16 @@ CapitalForecast <-
               * (1 + (0.0125 * (i - 1)))))
     }
   }
+  
+        #convert NA and NaN to 0. 
+    .capital_forecast_df <- replace(
+        .capital_forecast_df, sapply(.capital_forecast_df,
+        is.na), 0)
+
+    .capital_forecast_df <- replace(
+        .capital_forecast_df, sapply(.capital_forecast_df,
+        is.nan), 0)
+
   return(ts(
           .capital_forecast_df,
           start = start(macro_forecasts), 

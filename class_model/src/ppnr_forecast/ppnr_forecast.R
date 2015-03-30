@@ -85,6 +85,16 @@ PPNRForecast <- function(position_data, model_coefficients, macro_forecasts) {
   # assign values from temp variable to .ppnr_forecast_df,
   # modulo first row
   .ppnr_forecast_df[-1, ] <- .ppnr_forecast_df_temp
+  #convert NA and NaN to 0. 
+    .ppnr_forecast_df <- replace(
+        .ppnr_forecast_df, sapply(.ppnr_forecast_df,
+        is.na), 0)
+    .ppnr_forecast_df <- replace(
+        .ppnr_forecast_df, sapply(.ppnr_forecast_df,
+        is.nan), 0)
+
+
+
   return(ts(
           .ppnr_forecast_df,
           start = start(macro_forecasts), 

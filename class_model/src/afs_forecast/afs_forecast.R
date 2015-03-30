@@ -135,6 +135,14 @@ AFSForecast <- function(position_data, model_coefficients, macro_forecasts) {
   # data
   .afs_forecast_df <- .afs_forecast_df[-1]
   
+      #convert NA and NaN to 0. 
+    .afs_forecast_df <- replace(.afs_forecast_df, sapply(.afs_forecast_df,
+        is.na), 0)
+
+    .afs_forecast_df <- replace(.afs_forecast_df, sapply(.afs_forecast_df,
+        is.nan), 0)
+
+  
   return(ts(
           .afs_forecast_df,
           start = start(macro_forecasts), 

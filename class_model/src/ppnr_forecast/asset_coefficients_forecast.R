@@ -246,6 +246,17 @@ RevenueCoeffForecast <- function(
             sum(.position_data_processed$Return.on.Trading.Assets))
     }
   }
+
+    #convert NA and NaN to 0. 
+    .revenue_coeffs_forecast_df <- replace(
+        .revenue_coeffs_forecast_df, sapply(.revenue_coeffs_forecast_df,
+        is.na), 0)
+
+    .revenue_coeffs_forecast_df <- replace(
+        .revenue_coeffs_forecast_df, sapply(.revenue_coeffs_forecast_df,
+        is.nan), 0)
+
+
   
   return(.revenue_coeffs_forecast_df)
 } 
