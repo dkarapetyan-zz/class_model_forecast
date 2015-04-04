@@ -1,4 +1,4 @@
-# TODO: Createe RShiny version of graph_forecast, and deploy
+# TODO: Createe RShiny version of graph_forecast ui, and deploy
 # 
 # Author: David Karapetyan
 ###############################################################################
@@ -9,7 +9,7 @@ library(shiny)
 shinyUI(fluidPage(
         
         # Application title
-        titlePanel("Hello Shiny!"),
+        titlePanel("Hist"),
         
         # Sidebar with a slider input for the number of bins
         sidebarLayout(
