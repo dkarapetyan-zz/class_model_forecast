@@ -1,0 +1,36 @@
+library(knitr)
+library(tools)
+names(vignetteEngine(package = 'knitr'))
+devtools::build_vignettes()
+devtools::build_vignettes()
+q()
+install.packages("devtools")
+devtools::install_github("klutometis/roxygen")
+find_rtools()
+devtools::find_rtools()
+dev_tools::find_rtools()
+devtools::find_rtools()
+devtools::install_github("klutometis/roxygen")
+?install_github
+install.packages("httr")
+install.packages("httr")
+set_config(
+use_proxy(url="amweb.ey.net", port=8080, username='US\karapda', password='12358Ping'))
+set_config(
+use_proxy(url="amweb.ey.net", port=8080, username='US\\karapda', password='12358Ping'))
+require(httr)
+set_config(
+use_proxy(url="amweb.ey.net", port=8080, username='US\\karapda', password='12358Ping'))
+devtools::install_github("klutometis/roxygen")
+install.packages('forecast', 'tseries', 'knitr')
+install.packages(c('forecast', 'tseries', 'knitr'))
+require('testhat')
+install.packages('testhat')
+install.packages('testthat')
+require('PPNRValidation')
+a <- stationarity.test(1:100)
+a <- stationarity.test(sin(1:100))
+a
+a <- stationarity.test(sin(1:100))
+a
+print(a, format = "latex")
