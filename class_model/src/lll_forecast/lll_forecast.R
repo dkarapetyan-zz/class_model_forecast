@@ -19,9 +19,9 @@
 
 
 LLLForecast <- function(position_data, model_coefficients, macro_forecasts) {
-  source("src/lll_forecast/nco_forecast.R")
-  source("src/lll_forecast/balance_forecast.R")
-  source("src/lll_forecast/loss_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/nco_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/balance_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/loss_forecast.R")
   # testing of function arguments done in called subroutines
   
   

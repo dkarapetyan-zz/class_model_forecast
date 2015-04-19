@@ -20,9 +20,9 @@
 
 CapitalForecast <-
     function(position_data, model_coefficients, macro_forecasts) {
-  source("src/afs_forecast/afs_forecast.R")
-  source("src/ppnr_forecast/ppnr_forecast.R")
-  source("src/lll_forecast/lll_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/afs_forecast/afs_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/ppnr_forecast/ppnr_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/lll_forecast.R")
   
   
   # testing of inputs done in subroutines called by function

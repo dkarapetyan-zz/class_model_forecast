@@ -18,8 +18,8 @@
 #' macro_forecasts = object_time_series)
 
 LossForecast <- function(position_data, model_coefficients, macro_forecasts) {
-source("src/lll_forecast/balance_forecast.R")  
-source("src/lll_forecast/nco_forecast.R")  
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/balance_forecast.R")  
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/nco_forecast.R")  
   # initialize model loss forecast time series, which will be
   # used as the input to compute the lll forecast
   cols <- c(

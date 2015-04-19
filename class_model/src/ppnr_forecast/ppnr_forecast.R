@@ -20,8 +20,8 @@
 
 PPNRForecast <- function(position_data, model_coefficients, macro_forecasts) {
   
-  source("src/ppnr_forecast/asset_coefficients_forecast.R")
-  source("src/ppnr_forecast/asset_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/ppnr_forecast/asset_coefficients_forecast.R")
+  source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/ppnr_forecast/asset_forecast.R")
   
   # testing for inputs done in subroutines
   .revenue_forecast_df <- data.frame(RevenueForecast(position_data, 
