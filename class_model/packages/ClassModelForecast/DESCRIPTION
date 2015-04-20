@@ -1,0 +1,13 @@
+Package: ClassModelForecast
+Title: Class Model Forecasting for Financial Institutions
+Version: 0.0.0.9000
+Authors@R: person("David", "Karapetyan", email = "david.karapetyan@gmail.com",
+	role = c("aut", "cre"))
+Description: This package is a set of functions which
+	output time series forecasts of a financial institution's
+	PPPNR, Capital, NCO, and other variables. The heart of the
+	implementation is an Arima regression on inputs of macroeconomic
+	scenarios (base, adverse, or severely adverse) and bank position data.
+Depends: R (>= 3.0.3)
+License: GPL-3
+LazyData: true
