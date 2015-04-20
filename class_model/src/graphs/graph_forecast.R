@@ -14,26 +14,6 @@
 #' @author David Karapetyan
 #' @export
 #' @example
-#'library(ggplot2)
-#'library("zoo")
-#'library("Hmisc")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/model_coefficients_ey.RData")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/model_coefficients_frb.RData")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/nco_data.RData")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/ppnr_data.RData")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/total_assets.RData")
-#'load(""/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/capital_data.RData")
-#
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/nco_forecast.R")
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/balance_forecast.R")
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/capital_forecast/capital_forecast.R")
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/loss_forecast.R")
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/afs_forecast/afs_forecast.R")
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/lll_forecast.R")
-#'source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/prepare_position_data.R")
-#
-#
 #'GraphForecast(
 #'book = "capital",
 #'variable = "Net Income",
@@ -45,6 +25,26 @@
 #'capital_data = capital_data,
 #'model_coefficients = model_coefficients_ey,
 #'macro_forecasts = macro_forecasts)
+
+library(ggplot2)
+library("zoo")
+library("Hmisc")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/model_coefficients_ey.RData")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/model_coefficients_frb.RData")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/nco_data.RData")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/ppnr_data.RData")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/total_assets.RData")
+load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/capital_data.RData")
+
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/nco_forecast.R")
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/balance_forecast.R")
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/capital_forecast/capital_forecast.R")
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/loss_forecast.R")
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/afs_forecast/afs_forecast.R")
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/lll_forecast.R")
+source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/prepare_position_data.R")
+
 
 
 GraphForecast <- function(
@@ -144,10 +144,13 @@ book <- tolower(book)
       data = book_fortified,
       aes(book_fortified$Index,
           book_fortified[[make.names(variable)]]),
-      environment = .environment) #error with $ sign instead of [[ ]]
+      environment = .environment) 
   p <- p + ggtitle(paste(.book[["name"]], "Forecast"))
-  p <- p + xlab("Time")
+  p <- p + xlab("")
   p <- p + ylab(variable)
   p <- p + geom_line()
+#TODO next two lines cause errors with RShiny. Debug
+#  p <- p + scale_y_continuous(labels = comma) 	
+#  p <- p + theme_bw()
   return (p)
 }

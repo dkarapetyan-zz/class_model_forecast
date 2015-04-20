@@ -50,10 +50,10 @@ shinyUI(
 												label = "Choose a book to display:",
 												choices = c(
 														"Capital",
-														"PPNR",
+														#"PPNR",
 														"AFS",
 														"LLL",
-														"Loss",
+														#"Loss",
 														"NCO"
 #														"Asset Coefficients"
 																),
