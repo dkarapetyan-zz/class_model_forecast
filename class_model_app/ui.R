@@ -2,9 +2,6 @@
 # 
 # author: david karapetyan
 ###############################################################################
-load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/nco_data.RData")
-
-
 
 # define ui for application that draws a histogram
 shinyUI(

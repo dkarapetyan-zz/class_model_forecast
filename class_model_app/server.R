@@ -3,8 +3,8 @@
 # Author: David Karapetyan
 ###############################################################################
 
-source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/graphs/graph_forecast.R")
 library("shiny")
+library("ClassModelForecast")
 
 shinyServer(function(input, output) {
 			
