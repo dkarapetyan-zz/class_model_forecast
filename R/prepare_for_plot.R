@@ -1,4 +1,4 @@
-#' This function outputs a graph of an input forecast.
+#' This function outputs an object suitable for plotting in GGplot.
 #' 
 #' @param book Portion of trading book from which variables are obtained. This 
 #'  can be any of the following \code{c("lll", "afs", "loss", "nco", "capital",
@@ -12,9 +12,8 @@
 #' adverse macroeconomic forecasts 
 #' @return Object of class ggplot
 #' @author David Karapetyan
-#' @export
 
-#GraphForecast(
+#PrepareForPlot(
 #book = "capital",
 #variable = "Net Income",
 #bank = "Adbanc, Inc.",
@@ -26,28 +25,7 @@
 #model_coefficients = model_coefficients_ey,
 #macro_forecasts = macro_forecasts)
 
-#library(ggplot2)
-#library("zoo")
-#library("Hmisc")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/model_coefficients_ey.RData")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/model_coefficients_frb.RData")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/macro_forecasts.RData")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/nco_data.RData")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/ppnr_data.RData")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/total_assets.RData")
-#load("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/data/capital_data.RData")
-#
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/nco_forecast.R")
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/balance_forecast.R")
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/capital_forecast/capital_forecast.R")
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/loss_forecast.R")
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/afs_forecast/afs_forecast.R")
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/lll_forecast/lll_forecast.R")
-#source("/Users/davidkarapetyan/Documents/code/r/ppnr.quant.repo/class_model/src/prepare_position_data.R")
-
-
-
-GraphForecast <- function(
+PrepareForPlot <- function(
     book, variable, bank, quarter, nco_data, ppnr_data,
     total_assets, capital_data, model_coefficients, macro_forecasts) {
   
@@ -136,21 +114,6 @@ book <- tolower(book)
   book_fortified <- fortify(book_zoo)
   
 #get rid of all rows with NAs, so ggplot doesn't give warning
-  book_fortified <- na.omit(book_fortified)
+  return(na.omit(book_fortified))
   
-#otherwise, aes doesn't source environment properly
-  .environment <- environment() 
-  p <- ggplot(
-      data = book_fortified,
-      aes(book_fortified$Index,
-          book_fortified[[make.names(variable)]]),
-      environment = .environment) 
-  p <- p + ggtitle(paste(.book[["name"]], "Forecast"))
-  p <- p + xlab("")
-  p <- p + ylab(variable)
-  p <- p + geom_line()
-#TODO next two lines cause errors with RShiny. Debug
-#  p <- p + scale_y_continuous(labels = comma) 	
-#  p <- p + theme_bw()
-  return (p)
 }
