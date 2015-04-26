@@ -8,7 +8,7 @@
 #' @param capital_data  Capital data in data.frame format.
 #' @return A data frame that consists of one row that contains all the merged data.
 
-prepare_position_data <- function(bank, quarter, nco_data, ppnr_data,
+PreparePositionData <- function(bank, quarter, nco_data, ppnr_data,
     total_assets, capital_data) {
   if (!inherits(nco_data, "data.frame")) {
     stop("Expected nco_data to be a data.frame object.")

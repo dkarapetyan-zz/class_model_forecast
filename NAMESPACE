@@ -2,7 +2,6 @@
 
 export(AFSForecast)
 export(CapitalForecast)
-export(GraphForecast)
 export(LLLForecast)
 export(LossForecast)
 export(NCOForecast)

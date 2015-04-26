@@ -10,7 +10,7 @@
 #' coefficients computed from past history
 #' @param  macro_forecasts A time series of either basic, adverse, or severely
 #' adverse macroeconomic forecasts 
-#' @return Object of class ggplot
+#' @return Object of class data.frame
 #' @author David Karapetyan
 
 #PrepareForPlot(
@@ -35,7 +35,7 @@ book <- tolower(book)
   .book_list <- list(
       lll = list(
           name = "LLL",
-          variable = c("Total.Reserves...000.", "Provision"),
+          variable = c("Total.Reserves", "Provision"),
           func = "LLLForecast"),
       ppnr = list(
           name = "PPNR",
@@ -103,7 +103,7 @@ book <- tolower(book)
 #retrieve appropriate forecasting function, and prepare to graph
 
   .book <- .book_list[[book]]
-  position_data <- prepare_position_data(
+  position_data <- PreparePositionData(
       bank, quarter, nco_data, ppnr_data , total_assets, capital_data)
   
   .func <- as.name(.book[["func"]])
