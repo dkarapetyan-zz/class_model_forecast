@@ -11,7 +11,6 @@
 #' adverse, or severely adverse macroeconomic forecasts 
 #' @return object of class MTS
 #' @author David Karapetyan
-#' @export 
 
 
 RevenueCoeffForecast <- function(
