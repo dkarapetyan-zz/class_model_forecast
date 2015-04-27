@@ -12,6 +12,7 @@
 #' adverse macroeconomic forecasts 
 #' @return Object of class data.frame
 #' @author David Karapetyan
+#' @export
 
 #PrepareForPlot(
 #book = "capital",
