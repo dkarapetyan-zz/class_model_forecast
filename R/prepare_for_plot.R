@@ -1,13 +1,16 @@
 #' This function outputs an object suitable for plotting in GGplot.
 #' 
-#' @param book Portion of trading book from which variables are obtained. This 
+#' @param book A character string specifying the trading book from which variables are obtained. This 
 #'  can be any of the following \code{c("lll", "afs", "loss", "nco", "capital",
 #'  "balance", "ppnr")}
-#' @param variable Variable that will be plotted, with respect to time
-#' @param position_data A data frame of a particular 
-#'  bank's present balance sheet
-#' @param model_coefficients A data frame of arima calibration
-#' coefficients computed from past history
+#' @param variable A character string specifying the variable that will be plotted, with respect to time
+#' @param bank A character string specifying the bank
+#' @param quarter A character string specifying the year and quarter
+#' @param nco_data A data frame object aggregating U.S. bank NCO data
+#' @param ppnr_data A data frame object aggregating U.S. bank PPNR data
+#' @param total_assets A data frame object aggregating U.S. bank total assets
+#' @param capital_data A data frame object aggregating U.S. bank capital data
+#' @param model_coefficients A data frame of arima calibration coefficients computed from past history
 #' @param  macro_forecasts A time series of either basic, adverse, or severely
 #' adverse macroeconomic forecasts 
 #' @return Object of class data.frame
