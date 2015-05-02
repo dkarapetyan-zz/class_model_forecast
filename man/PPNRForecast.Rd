@@ -9,14 +9,11 @@ macroeconomic forecasts , and Arima model coefficients.}
 PPNRForecast(position_data, model_coefficients, macro_forecasts)
 }
 \arguments{
-\item{position_data}{A matrix of a particular bank's
-present balance sheet}
+\item{position_data}{A data frame of a particular bank's present balance sheet}
 
-\item{model_coefficients}{A matrix of arima calibration
-coefficients computed from past history}
+\item{model_coefficients}{A matrix of arima calibration coefficients computed from past history}
 
-\item{macro_forecasts}{A matrix of either basic,
-adverse, or severely adverse macroeconomic forecasts}
+\item{macro_forecasts}{An MTS of either basic, adverse, or severely adverse macroeconomic forecasts}
 }
 \value{
 object of class MTS

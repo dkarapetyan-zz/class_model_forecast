@@ -12,7 +12,7 @@ BalanceForecast(position_data, macro_forecasts)
 \item{position_data}{A data frame of a particular
 bank's present balance sheet}
 
-\item{macro_forecasts}{A time series of either basic, adverse, or severely
+\item{macro_forecasts}{An MTS of either basic, adverse, or severely
 adverse macroeconomic forecasts}
 }
 \value{

@@ -8,10 +8,10 @@ forecast from an input file for bank position data.}
 RevenueForecast(position_data, macro_forecasts)
 }
 \arguments{
-\item{position_data}{A matrix of a particular bank's
+\item{position_data}{A data frame of a particular bank's
 present balance sheet}
 
-\item{macro_forecasts}{A matrix of either basic,
+\item{macro_forecasts}{An MTS of either basic,
 adverse, or severely adverse macroeconomic forecasts}
 }
 \value{

@@ -8,26 +8,48 @@ PrepareForPlot(book, variable, bank, quarter, nco_data, ppnr_data, total_assets,
   capital_data, model_coefficients, macro_forecasts)
 }
 \arguments{
-\item{book}{Portion of trading book from which variables are obtained. This
-can be any of the following \code{c("lll", "afs", "loss", "nco", "capital",
-"balance", "ppnr")}}
+\item{book}{A character string specifying the trading book from which variables are obtained. This
+can be any of the following: \code{c("LLL", "AFS", "Loss", "NCO", "Capital",
+"Balance", "PPNR")}}
 
-\item{variable}{Variable that will be plotted, with respect to time}
+\item{variable}{A character string specifying the variable that will be plotted, with respect to time}
 
-\item{model_coefficients}{A data frame of arima calibration
-coefficients computed from past history}
+\item{bank}{A character string specifying the bank}
+
+\item{quarter}{A character string specifying the year and quarter}
+
+\item{nco_data}{A data frame aggregating U.S. bank NCO data}
+
+\item{ppnr_data}{A data frame aggregating U.S. bank PPNR data}
+
+\item{total_assets}{A data frame aggregating U.S. bank total assets}
+
+\item{capital_data}{A data frame aggregating U.S. bank capital data}
+
+\item{model_coefficients}{A data frame of arima calibration coefficients computed from past history}
 
 \item{macro_forecasts}{A time series of either basic, adverse, or severely
 adverse macroeconomic forecasts}
-
-\item{position_data}{A data frame of a particular
-bank's present balance sheet}
 }
 \value{
 Object of class data.frame
 }
 \description{
 This function outputs an object suitable for plotting in GGplot.
+}
+\examples{
+PrepareForPlot(
+"capital",
+"Net Income",
+"Adbanc, Inc.",
+"2014Q3",
+nco_data,
+ppnr_data,
+total_assets,
+capital_data,
+model_coefficients_ey,
+macro_forecasts
+)
 }
 \author{
 David Karapetyan

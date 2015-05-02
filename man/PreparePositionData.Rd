@@ -8,20 +8,20 @@ PreparePositionData(bank, quarter, nco_data, ppnr_data, total_assets,
   capital_data)
 }
 \arguments{
-\item{bank}{A bank name that exists in each of the data files.}
+\item{bank}{A character string that exists in each of the data files.}
 
-\item{quarter}{A quarter in the format "2013Q1".}
+\item{quarter}{A character string in the format "2013Q1".}
 
-\item{nco_data}{NCO data in data.frame format.}
+\item{nco_data}{A data frame object aggregating U.S. bank NCO data}
 
-\item{ppnr_data}{PPNR data in data.frame format.}
+\item{ppnr_data}{A data frame object aggregating U.S. bank NCO data}
 
-\item{total_assets}{Total assets data in data.frame format.}
+\item{total_assets}{A data  Total assets data in data.frame format.}
 
 \item{capital_data}{Capital data in data.frame format.}
 }
 \value{
-A data frame that consists of one row that contains all the merged data.
+A data frame of one row that contains all the merged data.
 }
 \description{
 This function creates position data for a bank for a given quarter.
