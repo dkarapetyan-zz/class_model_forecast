@@ -15,19 +15,20 @@
 #' adverse macroeconomic forecasts 
 #' @return Object of class data.frame
 #' @author David Karapetyan
-#' @export
-
+#' @examples
 #'PrepareForPlot(
-#'book = "capital",
-#'variable = "Net Income",
-#'bank = "Adbanc, Inc.",
-#'quarter = "2014Q3",
-#'nco_data = nco_data,
-#'ppnr_data = ppnr_data,
-#'total_assets = total_assets,
-#'capital_data = capital_data,
-#'model_coefficients = model_coefficients_ey,
-#'macro_forecasts = macro_forecasts)
+#'"capital",
+#'"Net Income",
+#'"Adbanc, Inc.",
+#'"2014Q3",
+#'nco_data,
+#'ppnr_data,
+#'total_assets,
+#'capital_data,
+#'model_coefficients_ey,
+#'macro_forecasts
+#')
+#' @export
 
 PrepareForPlot <- function(
     book, variable, bank, quarter, nco_data, ppnr_data,
