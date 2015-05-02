@@ -1,8 +1,8 @@
 #' This function outputs an object suitable for plotting in GGplot.
 #' 
 #' @param book A character string specifying the trading book from which variables are obtained. This 
-#'  can be any of the following \code{c("lll", "afs", "loss", "nco", "capital",
-#'  "balance", "ppnr")}
+#'  can be any of the following: \code{c("LLL", "AFS", "Loss", "NCO", "Capital",
+#'  "Balance", "PPNR")}
 #' @param variable A character string specifying the variable that will be plotted, with respect to time
 #' @param bank A character string specifying the bank
 #' @param quarter A character string specifying the year and quarter
