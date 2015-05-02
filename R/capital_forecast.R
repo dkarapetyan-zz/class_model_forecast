@@ -4,9 +4,9 @@
 #' 
 #' @param position_data A data frame of a particular 
 #' bank's present balance sheet
-#' @param model_coefficients A data frame of arima calibration
+#' @param model_coefficients A matrix of arima calibration
 #' coefficients computed from past history
-#' @param macro_forecasts A time series of either basic, adverse, or severely
+#' @param macro_forecasts An MTS of either basic, adverse, or severely
 #' adverse macroeconomic forecasts#'
 #' @return object of class MTS
 #' @author David Karapetyan

@@ -1,9 +1,9 @@
 #' This function outputs a PPNR asset
 #' forecast from an input file for bank position data.
 #' 
-#' @param position_data  A matrix of a particular bank's
+#' @param position_data  A data frame of a particular bank's
 #' present balance sheet
-#' @param macro_forecasts A matrix of either basic,
+#' @param macro_forecasts An MTS of either basic,
 #' adverse, or severely adverse macroeconomic forecasts 
 #' @return object of class MTS
 #' @author David Karapetyan

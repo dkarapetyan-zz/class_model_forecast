@@ -1,12 +1,12 @@
 #' This function creates position data for a bank for a given quarter.
 #'
-#' @param bank  A bank name that exists in each of the data files.
-#' @param quarter A quarter in the format "2013Q1".
-#' @param nco_data  NCO data in data.frame format.
-#' @param ppnr_data  PPNR data in data.frame format.
-#' @param total_assets  Total assets data in data.frame format.
+#' @param bank  A character string that exists in each of the data files.
+#' @param quarter A character string in the format "2013Q1".
+#' @param nco_data A data frame object aggregating U.S. bank NCO data
+#' @param ppnr_data A data frame object aggregating U.S. bank NCO data
+#' @param total_assets A data  Total assets data in data.frame format.
 #' @param capital_data  Capital data in data.frame format.
-#' @return A data frame that consists of one row that contains all the merged data.
+#' @return A data frame of one row that contains all the merged data.
 
 PreparePositionData <- function(bank, quarter, nco_data, ppnr_data,
     total_assets, capital_data) {

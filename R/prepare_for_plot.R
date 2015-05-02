@@ -6,10 +6,10 @@
 #' @param variable A character string specifying the variable that will be plotted, with respect to time
 #' @param bank A character string specifying the bank
 #' @param quarter A character string specifying the year and quarter
-#' @param nco_data A data frame object aggregating U.S. bank NCO data
-#' @param ppnr_data A data frame object aggregating U.S. bank PPNR data
-#' @param total_assets A data frame object aggregating U.S. bank total assets
-#' @param capital_data A data frame object aggregating U.S. bank capital data
+#' @param nco_data A data frame aggregating U.S. bank NCO data
+#' @param ppnr_data A data frame aggregating U.S. bank PPNR data
+#' @param total_assets A data frame aggregating U.S. bank total assets
+#' @param capital_data A data frame aggregating U.S. bank capital data
 #' @param model_coefficients A data frame of arima calibration coefficients computed from past history
 #' @param  macro_forecasts A time series of either basic, adverse, or severely
 #' adverse macroeconomic forecasts 
