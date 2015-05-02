@@ -10,56 +10,7 @@
 
 PreparePositionData <- function(bank, quarter, nco_data, ppnr_data,
     total_assets, capital_data) {
-  if (!inherits(nco_data, "data.frame")) {
-    stop("Expected nco_data to be a data.frame object.")
-  }
-  if (!inherits(total_assets, "data.frame")) {
-    stop("Expected total_assets to be a data.frame object.")
-  }
-  if (!inherits(capital_data, "data.frame")) {
-    stop("Expected capital_data to be a data.frame object.")
-  }
-  if (!inherits(ppnr_data, "data.frame")) {
-    stop("Expected ppnr_data to be a data.frame object.")
-  }
-  if (!is.character(bank)) {
-    stop("Expected bank to be a character")
-  }
-  if (!(quarter %in% nco_data$Period)) {
-    stop("Could not find quarter in nco_data")
-  }
-  if (!(quarter %in% capital_data$Period)) {
-    stop("Could not find quarter in capital_data")
-  }
-  if (!(quarter %in% ppnr_data$Period)) {
-    stop("Could not find quarter in ppnr_data")
-  }
-  if (!(quarter %in% total_assets$Period)) {
-    stop("Could not find quarter in total_assets")
-  }
-  if (!("Bank" %in% names(ppnr_data))) {
-    stop("ppnr_data does not contain a Bank column")
-  }
-  if (!(bank %in% ppnr_data$Bank)) {
-    stop("Could not find bank in ppnr_data")
-  }
-  
-  if (!("Bank" %in% names(nco_data))) {
-    stop("nco_data does not contain a Bank column")
-  }
-  if (!(bank %in% nco_data$Bank)) {
-    stop("Could not find bank in nco_data")
-  }
-  
-  if (!("Bank" %in% names(capital_data))) {
-    stop("capital_data does not contain a Bank column")
-  }
-  if (!(bank %in% capital_data$Bank)) {
-    stop("Could not find bank in capital_data")
-  }
-  
-  
-
+ 
   
   # Subset the ppnr data.
   .ppnr_bank_info <- ppnr_data[
