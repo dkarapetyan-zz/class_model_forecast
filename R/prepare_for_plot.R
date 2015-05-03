@@ -103,7 +103,7 @@ book <- tolower(book)
               "Return.on.Trading.Assets"),
           func = "RevenueCoeffForecast"))
   
-
+#TODO Refactor prepare_for_plot to use switch
 
 #retrieve appropriate forecasting function, and prepare to graph
 
